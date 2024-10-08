@@ -22,29 +22,33 @@ The project will be developed incrementally, following a milestone-based approac
 
 ## Milestones
 
-### Milestone 1: Data Integration
+### Milestone 1: Project Bootstrapping
 
 Establish connection with Airtable and implement data retrieval and parsing.
 
-### Milestone 2: Basic Sequence Generation
+### Milestone 2: Data Integration
+
+Establish connection with Airtable and implement data retrieval and parsing.
+
+### Milestone 3: Basic Sequence Generation
 
 Develop a simple algorithm to create yoga sequences based on basic parameters.
 
-### Milestone 3: Command-Line Interface
+### Milestone 4: Command-Line Interface
 
 Create a functional CLI for user input and sequence display.
 
-### Milestone 4: Enhanced Sequence Customization
+### Milestone 5: Enhanced Sequence Customization
 
 Improve sequence generation with options tailored for senior practitioners.
 
-### Milestone 5: Sequence Analysis and Refinement
+### Milestone 6: Sequence Analysis and Refinement
 
 Implement basic analysis tools to evaluate and improve generated sequences.
 
 ## Timeline
 
-Each milestone is estimated to take 1 day, with a total project duration of 5 days.
+Each milestone is estimated to take 1 day, with a total project duration of 6 days.
 
 ## Conclusion
 
