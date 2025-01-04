@@ -1,34 +1,39 @@
-1. Opening: 
-    - Centering and breath awareness: Start with Sukhasana (Easy Pose) or Seated Cross-Legged Pose. Sit erect and focus on your breath. Inhale and exhale deeply for 5-10 minutes. This will help you to center your mind and body. 
-    - Gentle warm-up movements: Do some gentle neck rolls, shoulder rolls and hip circles to warm up your body. 
-    - Setting intention: Close your eyes and set your intention for the practice. This could be a personal goal or a general positive affirmation.
+1. Breath Work (10 minutes)
 
-2. Sun Salutations: 
-    - Surya Namaskar A & B: Start with Sun Salutation A, slowly integrating breath with movement. Transition into Sun Salutation B, adding in Warrior poses for strength and alignment.  
-    - Key alignment: Ensure your knees are over your ankles in the lunges, and your hips are squared to the front of the mat in Warrior I. 
-    - Modifications: Use blocks for the forward fold if you can't reach the floor. Step instead of jump to transition between poses. 
-    - Breath guidance: Inhale as you open or expand, exhale as you fold or contract.
+Start in a comfortable seated position. Begin with basic breath awareness, noticing the natural rhythm of your breath for about a minute.
 
-3. Standing Poses: 
-    - Balance poses: Vrksasana (Tree Pose), Natarajasana (Dancer's Pose)
-    - Strength building: Virabhadrasana I, II, III (Warrior I, II, III)
-    - Alignment focus: Tadasana (Mountain Pose), Trikonasana (Triangle Pose)
-    - Modifications: Use a wall for balance poses, use blocks for poses where you can't reach the floor. 
+Then move on to Nadi Shodhana, or alternate nostril breathing. This technique balances the left and right sides of the brain and calms the nervous system. Use your right thumb to close your right nostril and inhale through the left. Close the left nostril with the ring finger, open the right and exhale. Inhale right, close right, open left, exhale. Continue for about 5 minutes.
 
-4. Floor Work: 
-    - Hip openers: Baddha Konasana (Bound Angle Pose), Pigeon Pose
-    - Spinal twists: Ardha Matsyendrasana (Half Lord of the Fishes Pose)
-    - Core engagement: Navasana (Boat Pose)
-    - Modifications: Use blocks or bolsters for support in hip openers and twists. Bend the knees in Boat Pose if needed.
+Next, practice Kapalabhati, or skull shining breath. This technique energizes the body and purifies the respiratory system. Inhale deeply, then exhale forcefully through the nose, pulling the navel toward the spine. The inhale will be automatic. Do three rounds of 30 breaths.
 
-5. Cool Down: 
-    - Gentle stretches: Paschimottanasana (Seated Forward Bend), Supta Baddha Konasana (Reclining Bound Angle)
-    - Final relaxation: Savasana (Corpse Pose)
-    - Closing meditation: Sit in Sukhasana (Easy Pose) or Padmasana (Lotus Pose) and focus on your breath for a few minutes. 
-    - Modifications: Use a bolster under the knees in Savasana if you have lower back issues. 
+Safety: Do not practice Kapalabhati if you have high blood pressure, heart disease, or a hernia. If you feel dizzy at any point, return to normal breathing.
 
-Additional considerations: 
-- Safety precautions: Always listen to your body. Don't push into pain. Use props as needed. 
-- Props needed: Yoga mat, blocks, bolster
-- Benefits of each pose: Strengthens and stretches the body, improves balance and flexibility, calms the mind.
-- Energy flow throughout sequence: The sequence starts with grounding, then moves into energizing and strengthening, then winds down with calming and relaxing poses.
+2. Dynamic Movement (20 minutes)
+
+Start in Mountain Pose. On an inhale, sweep your arms up to the sky. Exhale, bend at the hips and fold forward into Forward Fold. Inhale, lift halfway up to a flat back. Exhale, step or jump back into Plank and lower down into Chaturanga. Inhale into Upward-facing Dog. Exhale into Downward-facing Dog. This is one round of Sun Salutation A. Do five rounds to warm up the body.
+
+Next, practice Sun Salutation B, adding in Warrior I and Chair Pose. Do five rounds.
+
+Then move on to a flowing sequence that includes poses like Crescent Lunge, Warrior II, Side Angle Pose, and Triangle Pose. Try to stay in each pose for five breaths and move on an exhale.
+
+Safety: Always keep the knee in line with the ankle in standing poses to protect the knee joint. 
+
+3. Peak Poses (20 minutes)
+
+Start with Crow Pose, an arm balance that strengthens the upper body and core. From Forward Fold, bend the knees, place the hands on the mat shoulder-width apart, and lift the hips. Come onto the balls of the feet and press the knees into the upper arms while looking forward. Lift one foot off the mat, then the other. 
+
+Next, practice Forearm Stand. From Downward-facing Dog, lower onto the forearms. Walk the feet in closer, lift one leg, and kick up. Use a wall if needed. 
+
+Finally, try Handstand. From Downward-facing Dog, walk the feet in a bit, lift one leg, and kick up. Again, use a wall if needed.
+
+Safety: Warm up the wrists before arm balances and inversions. Come down if you feel any discomfort in the neck. 
+
+4. Integration (10 minutes)
+
+After the peak poses, cool down with counter poses like Child's Pose and Downward-facing Dog. 
+
+Then move on to seated poses like Seated Forward Fold and Seated Twist. 
+
+Finally, lie down for Savasana. Let the body absorb the practice for about 5 minutes. 
+
+Safety: Always end with Savasana to allow the body to integrate the practice.
