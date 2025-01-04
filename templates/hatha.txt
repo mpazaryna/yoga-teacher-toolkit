@@ -1,0 +1,186 @@
+As an experienced yoga instructor, create a comprehensive class plan for teaching {CONCEPT}. 
+
+FORMATTING REQUIREMENTS:
+- Include exactly ONE blank line after every heading
+- Include exactly ONE blank line between paragraphs
+- Include exactly ONE blank line after lists
+- Never include blank lines between list items
+- Use exactly 2 spaces for nested list indentation
+- Use asterisks (*) for all unordered lists
+- Follow Sanskrit naming format: "Pose Name (Sanskrit Name)"
+- Maintain consistent header hierarchy (# -> ## -> ###)
+
+Additionally, please include:
+
+1. Advanced pose variations and transitions
+2. Detailed anatomical alignment cues
+3. Energetic and spiritual aspects
+4. Prop usage for deeper practice
+5. Common adjustment techniques
+
+CREATIVE TEACHING DIRECTIVES:
+
+Deepen the Sensory Experience:
+* Create unique sensory anchors for key pose transitions
+* Design memorable visual metaphors that aren't cliché (avoid "flow like water")
+* Develop creative prop uses beyond their standard applications
+* Include unexpected sound elements (beyond typical breathing cues)
+
+Enhance Sequence Engagement:
+* Build creative narratives that connect pose sequences
+* Design unique transitions between standard poses
+* Create memorable "peak pose journeys" with unexpected preparation
+* Include micro-moments of discovery within familiar poses
+
+Add Teaching Texture:
+* Vary your cueing approach for different learning styles
+* Create unique sanskrit-english hybrid instructions that illuminate meaning
+* Design "aha moment" opportunities in familiar poses
+* Develop creative analogies from everyday life
+
+Build Unique Class Elements:
+* Create a signature opening ritual
+* Design unexpected meditation visualizations
+* Develop creative paired exercises
+* Include surprising mindfulness moments
+
+Deepen Practice Integration:
+* Connect poses to daily life activities in unexpected ways
+* Create unique mudras or gestures that enhance the practice theme
+* Design creative ways to bring philosophy into physical practice
+* Develop memorable take-home practices
+
+Enhance Student Experience:
+* Create "choose your own adventure" modification moments
+* Design creative ways to build community within class
+* Develop unique partner or group interactions
+* Include surprising moments of play or exploration
+
+Guidelines for Memorable Classes:
+* Start sequences in unexpected ways
+* Create signature transitions between standard poses
+* Design unique ways to explore familiar poses
+* Develop creative methods for teaching alignment
+
+ANTI-ROUTINE CHECKLIST:
+* Have you created at least one unique sequence combination?
+* Are your metaphors fresh and specific to this class theme?
+* Have you included unexpected moments of discovery?
+* Are there creative ways to explore alignment?
+* Have you designed unique community-building elements?
+* Are your modifications presented in engaging ways?
+
+Remember:
+* Focus on what makes THIS class unique
+* Create specific, memorable moments that enhance learning
+* Design experiences that surprise while maintaining safety
+* Develop creative ways to illuminate standard principles
+* Transform routine sequences into journeys of discovery
+* Include elements that make the class memorable and personal
+
+SAFETY NOTE:
+* All creative elements must maintain proper alignment principles
+* Innovations should never compromise physical safety
+* Creative sequences must respect anatomical limitations
+* Unique elements should enhance, not distract from, proper form
+
+The class plan should include:
+
+1. A clear introduction to the practice focus
+2. Proper warm-up sequence
+3. Main pose sequences and transitions
+4. Cool-down and meditation guidance
+5. Sanskrit names are required for all poses
+6. Poses should be named in the following format: "Pose Name (Sanskrit Name)"
+7. Poses should flow logically and be anatomical compatible.  
+8. Include a section on the philosophy of yoga and how it relates to the practice.
+
+## Class Overview
+
+Provide a detailed overview including:
+* Practice style and tradition
+* Main benefits and focus areas
+* Target audience and experience level
+* Expected outcomes
+
+## Class Structure
+
+* Total Duration: [Specify minutes]
+* Level: [Beginner/Intermediate/Advanced]
+* Props Needed: [List required and optional props]
+* Room Setup: [Environmental requirements]
+
+## Sequence Breakdown
+
+### Opening (5-10 minutes)
+
+* Centering technique
+* Initial breath work
+* Setting intention
+
+### Warm-Up (10-15 minutes)
+
+Group poses by anatomical focus:
+* Joints and mobility work
+* Gentle stretches
+* Basic strength activation
+
+### Main Practice (25-30 minutes)
+
+Detail each pose with:
+* Full pose name with Sanskrit
+* Key alignment points
+* Breath coordination
+* Transitions
+* Hold times
+
+### Cool Down (10-15 minutes)
+
+* Counter poses
+* Gentle stretches
+* Recovery positions
+
+### Closing (5-10 minutes)
+
+* Final relaxation
+* Meditation technique
+* Integration practice
+
+## Key Teaching Points
+
+### ALIGNMENT CUES
+
+* Three key anatomical focus points per pose
+* Exactly 15 words per cue
+* Direction for hands-on adjustments
+
+### BREATHING GUIDANCE
+
+* Specific breath techniques for each section
+* Exactly 15 words per instruction
+* Integration with movement
+
+### MODIFICATIONS
+
+* Props and adaptation options
+* Level-specific variations
+* Exactly 15 words per modification
+
+### SAFETY NOTES
+
+* Contraindications
+* Risk management
+* Exactly 15 words per note
+
+### SPIRITUAL ASPECTS
+
+* Traditional context
+* Energetic principles
+* Exactly 15 words per aspect
+
+## Common Challenges
+
+* Physical limitations and solutions
+* Breathing coordination issues
+* Balance and stability adaptations
+* Mind-body integration support
