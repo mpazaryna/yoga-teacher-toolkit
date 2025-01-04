@@ -1,39 +1,71 @@
-1. Breath Work (10 minutes)
+## Class Overview
 
-Start in a comfortable seated position. Begin with basic breath awareness, noticing the natural rhythm of your breath for about a minute.
+This class will focus on Hatha Yoga, a practice rooted in tradition that aims to balance strength and flexibility. The main benefits will be increased muscle tone, improved posture, and enhanced mental clarity. It is suitable for beginners who want to deepen their yoga practice. By the end of the class, students will have a greater understanding of their body alignment and feel more connected to their breath.
 
-Then move on to Nadi Shodhana, or alternate nostril breathing. This technique balances the left and right sides of the brain and calms the nervous system. Use your right thumb to close your right nostril and inhale through the left. Close the left nostril with the ring finger, open the right and exhale. Inhale right, close right, open left, exhale. Continue for about 5 minutes.
+## Class Structure
 
-Next, practice Kapalabhati, or skull shining breath. This technique energizes the body and purifies the respiratory system. Inhale deeply, then exhale forcefully through the nose, pulling the navel toward the spine. The inhale will be automatic. Do three rounds of 30 breaths.
+* Total Duration: 60 minutes
+* Level: Beginner
+* Props Needed: Yoga mat, two yoga blocks, and a yoga strap
+* Room Setup: Warm, softly lit room with enough space for personal mats
 
-Safety: Do not practice Kapalabhati if you have high blood pressure, heart disease, or a hernia. If you feel dizzy at any point, return to normal breathing.
+## Sequence Breakdown
 
-2. Dynamic Movement (20 minutes)
+### Opening (5-10 minutes)
 
-Start in Mountain Pose. On an inhale, sweep your arms up to the sky. Exhale, bend at the hips and fold forward into Forward Fold. Inhale, lift halfway up to a flat back. Exhale, step or jump back into Plank and lower down into Chaturanga. Inhale into Upward-facing Dog. Exhale into Downward-facing Dog. This is one round of Sun Salutation A. Do five rounds to warm up the body.
+We begin with a centering technique of grounding our feet, feeling the earth beneath us. We move into initial breath work, using Ujjayi Pranayama (Victorious Breath) to create heat in the body. We set the intention of balance – finding strength and flexibility in each pose.
 
-Next, practice Sun Salutation B, adding in Warrior I and Chair Pose. Do five rounds.
+### Warm-Up (10-15 minutes)
 
-Then move on to a flowing sequence that includes poses like Crescent Lunge, Warrior II, Side Angle Pose, and Triangle Pose. Try to stay in each pose for five breaths and move on an exhale.
+Our warm-up focuses on loosening the joints and increasing mobility. We will start with neck and shoulder rolls, then move to Cat-Cow Pose (Marjaryasana-Bitilasana) for spinal mobility. We will follow with a gentle stretch in Child's Pose (Balasana), then activate our core with Plank Pose (Phalakasana).
 
-Safety: Always keep the knee in line with the ankle in standing poses to protect the knee joint. 
+### Main Practice (25-30 minutes)
 
-3. Peak Poses (20 minutes)
+Our main practice begins with Mountain Pose (Tadasana), focusing on alignment and grounding. We transition into Sun Salutation A (Surya Namaskar A) with key alignment cues for each pose. We will also explore Triangle Pose (Trikonasana) for strength and Side Plank (Vasisthasana) for balance. We will hold each pose for five to ten breaths.
 
-Start with Crow Pose, an arm balance that strengthens the upper body and core. From Forward Fold, bend the knees, place the hands on the mat shoulder-width apart, and lift the hips. Come onto the balls of the feet and press the knees into the upper arms while looking forward. Lift one foot off the mat, then the other. 
+### Cool Down (10-15 minutes)
 
-Next, practice Forearm Stand. From Downward-facing Dog, lower onto the forearms. Walk the feet in closer, lift one leg, and kick up. Use a wall if needed. 
+For our cool down, we will counter our previous poses with Supine Twist (Supta Matsyendrasana) and a gentle hamstring stretch in Reclining Hand-to-Big-Toe Pose (Supta Padangusthasana). We end with Legs-Up-the-Wall Pose (Viparita Karani) for recovery.
 
-Finally, try Handstand. From Downward-facing Dog, walk the feet in a bit, lift one leg, and kick up. Again, use a wall if needed.
+### Closing (5-10 minutes)
 
-Safety: Warm up the wrists before arm balances and inversions. Come down if you feel any discomfort in the neck. 
+Our closing will include a final relaxation in Corpse Pose (Savasana), a simple meditation technique focusing on breath awareness, and a brief discussion on integrating the practice off the mat.
 
-4. Integration (10 minutes)
+## Key Teaching Points
 
-After the peak poses, cool down with counter poses like Child's Pose and Downward-facing Dog. 
+### ALIGNMENT CUES
 
-Then move on to seated poses like Seated Forward Fold and Seated Twist. 
+* In Mountain Pose, root feet down, engage thighs, lift chest.
+* In Triangle Pose, align shoulders, engage core, reach fingertips.
+* Direct hands-on adjustments to help students find correct alignment.
 
-Finally, lie down for Savasana. Let the body absorb the practice for about 5 minutes. 
+### BREATHING GUIDANCE
 
-Safety: Always end with Savasana to allow the body to integrate the practice.
+* Inhale to create space, exhale to deepen into poses.
+* Coordinate breath with movement, linking each breath to a movement.
+* Ujjayi breath to create heat and focus mind.
+
+### MODIFICATIONS
+
+* Yoga blocks for Triangle Pose to bring ground closer.
+* Yoga strap for Reclining Hand-to-Big-Toe Pose for tighter hamstrings.
+* Knee on the ground for Side Plank for stability.
+
+### SAFETY NOTES
+
+* Avoid deep twists if any spinal injuries.
+* Always listen to your body, modify as needed.
+* Keep neck neutral in all poses to avoid strain.
+
+### SPIRITUAL ASPECTS
+
+* Yoga is unity – of breath, body, and mind.
+* Focus on inner journey, not just physical postures.
+* Be present, letting go of external distractions and judgments.
+
+## Common Challenges
+
+* For tight hips, use a block under the sitting bones in seated poses
+* For difficulty coordinating breath, return to natural breath and then slowly re-introduce Ujjayi Pranayama
+* For balance issues, fix gaze on a non-moving point and engage core
+* For disconnect from mental practice, return to intention and breath awareness.

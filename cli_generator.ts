@@ -5,7 +5,7 @@ import {
 
 async function example1() {
   console.log("Running Example 1: Using template file with level, duration, and focus");
-  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "templates", "yogaclass.txt");
+  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "templates", "hatha.txt");
   await generateYogaSequence({
     provider: "openai",
     temperature: 0.7,

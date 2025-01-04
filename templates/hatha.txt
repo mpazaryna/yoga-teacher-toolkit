@@ -1,4 +1,4 @@
-As an experienced yoga instructor, create a comprehensive class plan for teaching {CONCEPT}. 
+As an experienced yoga instructor, create a comprehensive class plan for teaching new to yoga students. 
 
 FORMATTING REQUIREMENTS:
 - Include exactly ONE blank line after every heading
