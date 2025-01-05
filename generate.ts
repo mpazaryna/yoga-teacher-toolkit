@@ -1,4 +1,5 @@
 import { join, dirname, fromFileUrl } from "@std/path";
+import { parse } from "@std/flags";
 import {
   generateYogaSequence, usageTracker
 } from "@paz/lexikon";
@@ -30,7 +31,29 @@ const PROVIDER_CONFIGS: Record<Provider, ProviderConfig> = {
   },
 };
 
-async function generateYogaFromTemplate(provider: Provider) {
+// Parse command line arguments
+const flags = parse(Deno.args, {
+  string: ["provider", "level", "duration", "focus"],
+  default: {
+    level: "intermediate",
+    duration: "60 minutes",
+    focus: "strength and flexibility",
+  },
+});
+
+const provider = flags.provider as Provider;
+if (!provider || !PROVIDER_CONFIGS[provider]) {
+  console.error("Please specify a valid provider: openai, claude, gemini, or groq");
+  console.error("\nUsage:");
+  console.error("  deno run --allow-read --allow-write generate.ts --provider=claude [options]");
+  console.error("\nOptions:");
+  console.error("  --level=<string>         Difficulty level (default: intermediate)");
+  console.error("  --duration=<string>      Session duration (default: 60 minutes)");
+  console.error("  --focus=<string>         Practice focus (default: strength and flexibility)");
+  Deno.exit(1);
+}
+
+async function generateYogaFromTemplate(provider: Provider, level: string, duration: string, focus: string) {
   console.log(`Generating yoga sequence using ${provider.toUpperCase()}...`);
   const templatePath = join(dirname(fromFileUrl(import.meta.url)), "templates", "hatha.txt");
 
@@ -41,18 +64,18 @@ async function generateYogaFromTemplate(provider: Provider) {
     temperature: 0.7,
     ...PROVIDER_CONFIGS[provider],
     template,
-    level: "intermediate",
-    duration: "60 minutes",
-    focus: "strength and flexibility"
+    level,
+    duration,
+    focus
   });
 
   // Save the generated sequence
-  const outputPath = join(dirname(fromFileUrl(import.meta.url)), "..", "..", "output", `yoga-${provider}.md`);
+  const outputPath = join(dirname(fromFileUrl(import.meta.url)), "output", `yoga-${provider}.md`);
   await Deno.writeTextFile(outputPath, result.content);
   console.log(`\nSequence saved to: ${outputPath}`);
 
   // Save evaluation results
-  const evaluationPath = join(dirname(fromFileUrl(import.meta.url)), "..", "..", "output", `yoga-evaluation-${provider}.md`);
+  const evaluationPath = join(dirname(fromFileUrl(import.meta.url)), "output", `yoga-evaluation-${provider}.md`);
   const evaluationContent = [
     `# Yoga Sequence Evaluation Results - ${provider.toUpperCase()}`,
     "",
@@ -74,9 +97,9 @@ async function generateYogaFromTemplate(provider: Provider) {
     "",
     "## Generation Details",
     `- Model: ${PROVIDER_CONFIGS[provider].model}`,
-    `- Level: intermediate`,
-    `- Duration: 60 minutes`,
-    `- Focus: strength and flexibility`,
+    `- Level: ${level}`,
+    `- Duration: ${duration}`,
+    `- Focus: ${focus}`,
     `- Temperature: 0.7`,
     `- Timestamp: ${new Date().toISOString()}`
   ].join("\n");
@@ -112,11 +135,5 @@ async function generateYogaFromTemplate(provider: Provider) {
 
 // If this module is run directly, generate sequences for all providers
 if (import.meta.main) {
-  const provider = Deno.args[0] as Provider;
-  if (!provider || !PROVIDER_CONFIGS[provider]) {
-    console.error("Please specify a valid provider: openai, claude, gemini, or groq");
-    Deno.exit(1);
-  }
-  
-  await generateYogaFromTemplate(provider);
+  await generateYogaFromTemplate(provider, flags.level, flags.duration, flags.focus);
 } 

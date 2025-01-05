@@ -79,8 +79,8 @@ const config: YogaConfig = {
   level: "intermediate",
   duration: "60 minutes",
   focus: "strength and flexibility",
-  outputPath: join(__dirname, "..", "..", "output", `yoga-improved-${provider}.md`),
-  evaluationPath: join(__dirname, "..", "..", "output", `yoga-evaluation-${provider}.md`)
+  outputPath: join(__dirname, "output", `yoga-sequence-improved-${provider}.md`),
+  evaluationPath: join(__dirname, "output", `yoga-sequence-evaluation-${provider}.md`)
 };
 
 // Run improvement process
@@ -118,7 +118,42 @@ async function improveSequence(
     }
   }
 
-  return result!;
+  // Manually save the files with our desired names
+  await Deno.writeTextFile(config.outputPath, result.content);
+  console.log(`\nSequence saved to: ${config.outputPath}`);
+
+  const evaluationContent = [
+    `# Yoga Sequence Evaluation Results - ${provider.toUpperCase()}`,
+    "",
+    `## Overall Score: ${(result.evaluation.overallScore * 100).toFixed(1)}%`,
+    "",
+    "## Detailed Scores",
+    ...Object.entries(result.evaluation.criteriaScores).map(([criterion, score]) => [
+      `### ${criterion}: ${(score.score * 100).toFixed(1)}%`,
+      ...score.details.map(detail => `- ${detail}`),
+      ""
+    ]).flat(),
+    "## Domain-Specific Metrics",
+    ...Object.entries(result.evaluation.domainSpecificMetrics).map(([metric, value]) => 
+      `- ${metric}: ${value}`
+    ),
+    "",
+    "## Recommendations",
+    ...result.evaluation.recommendations.map(rec => `- ${rec}`),
+    "",
+    "## Generation Details",
+    `- Model: ${PROVIDER_CONFIGS[provider].model}`,
+    `- Level: ${config.level}`,
+    `- Duration: ${config.duration}`,
+    `- Focus: ${config.focus}`,
+    `- Temperature: ${config.temperature}`,
+    `- Timestamp: ${new Date().toISOString()}`
+  ].join("\n");
+
+  await Deno.writeTextFile(config.evaluationPath, evaluationContent);
+  console.log(`Evaluation results saved to: ${config.evaluationPath}`);
+
+  return result;
 }
 
 // Run the improvement process
