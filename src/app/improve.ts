@@ -60,6 +60,15 @@ const __dirname = dirname(fromFileUrl(import.meta.url));
 const templatePath = join(__dirname, "../../templates", "hatha.txt");
 const template = await Deno.readTextFile(templatePath);
 
+// Function to generate a 5 character alphanumeric ID
+function generateShortId(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  return Array.from(
+    { length: 5 },
+    () => chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join('');
+}
+
 // Create config
 const config: YogaGeneratorOptions = {
   provider,
@@ -75,7 +84,39 @@ const config: YogaGeneratorOptions = {
 // Generate the sequence
 const result = await generateYogaSequence(config);
 
-// Save the sequence
-const outputPath = join(__dirname, "../../output", `yoga-sequence-${provider}.md`);
-await Deno.writeTextFile(outputPath, result);
+// Create unique ID and format timestamp
+const uniqueId = generateShortId();
+const timestamp = new Date().toISOString().split('T')[0];
+
+// Ensure output directory exists
+const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
+try {
+  await Deno.stat(outputDir);
+} catch {
+  await Deno.mkdir(outputDir, { recursive: true });
+}
+
+// Save the sequence with metadata
+const outputPath = join(
+  outputDir,
+  `${uniqueId}-improve.md`
+);
+
+// Add metadata header to the output
+const outputContent = [
+  "---",
+  `id: ${uniqueId}`,
+  `date: ${new Date().toISOString()}`,
+  `provider: ${provider}`,
+  `template: improve`,
+  `level: ${flags.level}`,
+  `duration: ${flags.duration}`,
+  `focus: ${flags.focus}`,
+  "status: draft",
+  "---",
+  "",
+  result
+].join("\n");
+
+await Deno.writeTextFile(outputPath, outputContent);
 console.log(`\nSequence saved to: ${outputPath}`); 

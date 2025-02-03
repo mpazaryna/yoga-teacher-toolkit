@@ -36,7 +36,6 @@ export interface BaseGeneratorOptions {
   model?: string;
   template?: string;
   templatePath?: string;
-  outputFile: string;
 }
 
 // Story Generator Types

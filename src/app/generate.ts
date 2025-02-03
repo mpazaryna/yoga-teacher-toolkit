@@ -1,9 +1,31 @@
 import { join, dirname, fromFileUrl } from "@std/path";
 import { parse } from "@std/flags";
+import { ensureDir } from "@std/fs";
 import {
   generateYogaSequence, usageTracker
 } from "@paz/lexikon";
 
+// Function to generate a 5 character alphanumeric ID
+function generateShortId(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  return Array.from(
+    { length: 5 },
+    () => chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join('');
+}
+
+// Ensure output directory exists
+async function ensureOutputDir(dirPath: string) {
+  try {
+    await Deno.stat(dirPath);
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) {
+      await Deno.mkdir(dirPath, { recursive: true });
+    } else {
+      throw error;
+    }
+  }
+}
 
 type Provider = "openai" | "claude" | "gemini" | "groq";
 
@@ -33,11 +55,12 @@ const PROVIDER_CONFIGS: Record<Provider, ProviderConfig> = {
 
 // Parse command line arguments
 const flags = parse(Deno.args, {
-  string: ["provider", "level", "duration", "focus"],
+  string: ["provider", "level", "duration", "focus", "template"],
   default: {
     level: "intermediate",
     duration: "60 minutes",
     focus: "strength and flexibility",
+    template: "aileen"
   },
 });
 
@@ -50,45 +73,87 @@ if (!provider || !PROVIDER_CONFIGS[provider]) {
   console.error("  --level=<string>         Difficulty level (default: intermediate)");
   console.error("  --duration=<string>      Session duration (default: 60 minutes)");
   console.error("  --focus=<string>         Practice focus (default: strength and flexibility)");
+  console.error("  --template=<string>      Template to use (default: aileen)");
   Deno.exit(1);
 }
 
-async function generateYogaFromTemplate(provider: Provider, level: string, duration: string, focus: string) {
+async function generateYogaFromTemplate(provider: Provider, level: string, duration: string, focus: string, templateName: string) {
   console.log(`Generating yoga sequence using ${provider.toUpperCase()}...`);
-  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "../../templates", "aileen.txt");
+  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "../../data/templates", `${templateName}.txt`);
 
-  const template = await Deno.readTextFile(templatePath);
-  
-  const result = await generateYogaSequence({
-    provider,
-    temperature: 0.7,
-    ...PROVIDER_CONFIGS[provider],
-    template,
-    level,
-    duration,
-    focus
-  });
+  try {
+    const template = await Deno.readTextFile(templatePath);
+    
+    const result = await generateYogaSequence({
+      provider,
+      temperature: 0.7,
+      ...PROVIDER_CONFIGS[provider],
+      template,
+      level,
+      duration,
+      focus
+    });
 
-  // Save the generated sequence
-  const outputPath = join(dirname(fromFileUrl(import.meta.url)), "../../output", `yoga-${provider}.md`);
-  await Deno.writeTextFile(outputPath, result);
-  console.log(`\nSequence saved to: ${outputPath}`);
+    // Create unique ID
+    const uniqueId = generateShortId();
 
-  // Display usage statistics
-  const stats = usageTracker.getUsageStats();
-  console.log("\nUsage Statistics:");
-  console.log(`Total API calls: ${stats.totalCalls}`);
-  console.log(`Success rate: ${stats.successRate.toFixed(1)}%`);
-  console.log(`Average latency: ${stats.averageLatency.toFixed(0)}ms`);
-  console.log(`Total tokens used: ${stats.totalTokens}`);
-  console.log(`Estimated cost: $${stats.totalCost.toFixed(4)}`);
-  
-  if (stats.usageByProvider[provider]) {
-    console.log(`Tokens used by ${provider}: ${stats.usageByProvider[provider]}`);
+    // Ensure output directory exists
+    const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
+    await ensureDir(outputDir);
+
+    // Save the generated sequence with unique ID prefix
+    const outputPath = join(outputDir, `${uniqueId}-${templateName}.md`);
+    
+    // Add metadata header to the output
+    const outputContent = [
+      "---",
+      `id: ${uniqueId}`,
+      `date: ${new Date().toISOString()}`,
+      `provider: ${provider}`,
+      `template: ${templateName}`,
+      `level: ${level}`,
+      `duration: ${duration}`,
+      `focus: ${focus}`,
+      "status: draft",
+      "---",
+      "",
+      result
+    ].join("\n");
+
+    await Deno.writeTextFile(outputPath, outputContent);
+    console.log(`\nSequence saved to: ${outputPath}`);
+
+    // Display usage statistics
+    const stats = usageTracker.getUsageStats();
+    console.log("\nUsage Statistics:");
+    console.log(`Total API calls: ${stats.totalCalls}`);
+    console.log(`Success rate: ${stats.successRate.toFixed(1)}%`);
+    console.log(`Average latency: ${stats.averageLatency.toFixed(0)}ms`);
+    console.log(`Total tokens used: ${stats.totalTokens}`);
+    console.log(`Estimated cost: $${stats.totalCost.toFixed(4)}`);
+    
+    if (stats.usageByProvider[provider]) {
+      console.log(`Tokens used by ${provider}: ${stats.usageByProvider[provider]}`);
+    }
+
+    // Print the unique ID for reference
+    console.log(`\nSequence ID: ${uniqueId}`);
+  } catch (error) {
+    if (error instanceof Deno.errors.NotFound) {
+      console.error(`Template '${templateName}' not found at ${templatePath}`);
+      console.error("\nAvailable templates:");
+      for await (const dirEntry of Deno.readDir(join(dirname(fromFileUrl(import.meta.url)), "../../data/templates"))) {
+        if (dirEntry.isFile && dirEntry.name.endsWith(".txt")) {
+          console.error(`  - ${dirEntry.name.replace(".txt", "")}`);
+        }
+      }
+      Deno.exit(1);
+    }
+    throw error;
   }
 }
 
 // If this module is run directly, generate sequences for all providers
 if (import.meta.main) {
-  await generateYogaFromTemplate(provider, flags.level, flags.duration, flags.focus);
+  await generateYogaFromTemplate(provider, flags.level, flags.duration, flags.focus, flags.template);
 } 

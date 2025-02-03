@@ -5,8 +5,17 @@
  * based on specified difficulty levels, durations, and focus areas.
  */
 
-import type { YogaGeneratorOptions } from "../../types.ts";
+import type { YogaGeneratorOptions } from "../types.ts";
 import { BaseGenerator } from "./base.ts";
+
+// Function to generate a 5 character alphanumeric ID
+function generateShortId(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  return Array.from(
+    { length: 5 },
+    () => chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join('');
+}
 
 /**
  * @class YogaGenerator
@@ -16,7 +25,7 @@ import { BaseGenerator } from "./base.ts";
  * time duration, and specific focus areas for practice.
  */
 export class YogaGenerator extends BaseGenerator {
-  protected override options: YogaGeneratorOptions & { outputFile: string };
+  protected override options: YogaGeneratorOptions;
 
   /**
    * @constructor
@@ -25,17 +34,14 @@ export class YogaGenerator extends BaseGenerator {
    * @param {string} [options.level="beginner"] - Difficulty level of the yoga sequence
    * @param {string} [options.duration="60 minutes"] - Length of the yoga session
    * @param {string} [options.focus="strength and flexibility"] - Specific focus area for the practice
-   * @param {Object} options.rest - Additional configuration options inherited from BaseGenerator
    */
   constructor(options: YogaGeneratorOptions) {
-    const { provider, ...rest } = options;
     const baseOptions = {
-      provider,
-      outputFile: `yoga-${provider}.md`,
+      provider: options.provider,
       level: "beginner",
       duration: "60 minutes",
       focus: "strength and flexibility",
-      ...rest,
+      ...options,
     };
     super(baseOptions);
     this.options = baseOptions;
@@ -73,8 +79,7 @@ export class YogaGenerator extends BaseGenerator {
  * @param {YogaGeneratorOptions} options - Configuration options for yoga sequence generation
  * @returns {Promise<string>} The generated yoga sequence content
  * @description A convenience function that instantiates a YogaGenerator and generates
- * a customized yoga sequence based on the provided options. The sequence is returned
- * as a string and saved to a markdown file.
+ * a customized yoga sequence based on the provided options.
  */
 export async function generateYogaSequence(options: YogaGeneratorOptions): Promise<string> {
   const generator = new YogaGenerator(options);

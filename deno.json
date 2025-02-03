@@ -3,11 +3,23 @@
     "@std/path": "https://deno.land/std@0.219.0/path/mod.ts",
     "@std/fs": "https://deno.land/std@0.219.0/fs/mod.ts",
     "@std/flags": "https://deno.land/std@0.219.0/flags/mod.ts",
+    "@std/yaml": "https://deno.land/std@0.219.0/yaml/mod.ts",
     "@paz/lexikon": "./src/lexikon/mod.ts",
-    "@paz/lexikon/*": "./src/lexikon/*"
+    "@paz/lexikon/*": "./src/lexikon/*",
+    "@data": "./data",
+    "@templates": "./data/templates",
+    "@output": "./data/output",
+    "@setlists": "./data/setlists"
   },
   "tasks": {
     "dev": "deno run --allow-read --allow-write src/app/generate.ts",
-    "improve": "deno run --allow-read --allow-write src/app/improve.ts"
+    "improve": "deno run --allow-read --allow-write src/app/improve.ts",
+    "generate": "deno run --allow-read --allow-write src/app/generate.ts",
+    "generate:aileen": "deno task generate --provider=claude --template=aileen",
+    "generate:hatha": "deno task generate --provider=claude --template=hatha",
+    "generate:vinyasa": "deno task generate --provider=claude --template=vinyasa",
+    "approve": "deno run --allow-read --allow-write src/app/approve.ts",
+    "list:drafts": "deno run --allow-read src/app/list.ts --status=draft",
+    "list:approved": "deno run --allow-read src/app/list.ts --status=approved"
   }
 }
