@@ -2,7 +2,7 @@ import { join, dirname, fromFileUrl } from "@std/path";
 import { parse } from "@std/flags";
 import {
   generateYogaSequence, usageTracker
-} from "@paz/lexikon";
+} from "./src/lexikon/mod.ts";
 
 
 type Provider = "openai" | "claude" | "gemini" | "groq";
@@ -55,7 +55,7 @@ if (!provider || !PROVIDER_CONFIGS[provider]) {
 
 async function generateYogaFromTemplate(provider: Provider, level: string, duration: string, focus: string) {
   console.log(`Generating yoga sequence using ${provider.toUpperCase()}...`);
-  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "templates", "hatha.txt");
+  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "templates", "aileen.txt");
 
   const template = await Deno.readTextFile(templatePath);
   
@@ -71,53 +71,8 @@ async function generateYogaFromTemplate(provider: Provider, level: string, durat
 
   // Save the generated sequence
   const outputPath = join(dirname(fromFileUrl(import.meta.url)), "output", `yoga-${provider}.md`);
-  await Deno.writeTextFile(outputPath, result.content);
+  await Deno.writeTextFile(outputPath, result);
   console.log(`\nSequence saved to: ${outputPath}`);
-
-  // Save evaluation results
-  const evaluationPath = join(dirname(fromFileUrl(import.meta.url)), "output", `yoga-evaluation-${provider}.md`);
-  const evaluationContent = [
-    `# Yoga Sequence Evaluation Results - ${provider.toUpperCase()}`,
-    "",
-    `## Overall Score: ${(result.evaluation.overallScore * 100).toFixed(1)}%`,
-    "",
-    "## Detailed Scores",
-    ...Object.entries(result.evaluation.criteriaScores).map(([criterion, score]) => [
-      `### ${criterion}: ${(score.score * 100).toFixed(1)}%`,
-      ...score.details.map(detail => `- ${detail}`),
-      ""
-    ]).flat(),
-    "## Domain-Specific Metrics",
-    ...Object.entries(result.evaluation.domainSpecificMetrics).map(([metric, value]) => 
-      `- ${metric}: ${value}`
-    ),
-    "",
-    "## Recommendations",
-    ...result.evaluation.recommendations.map(rec => `- ${rec}`),
-    "",
-    "## Generation Details",
-    `- Model: ${PROVIDER_CONFIGS[provider].model}`,
-    `- Level: ${level}`,
-    `- Duration: ${duration}`,
-    `- Focus: ${focus}`,
-    `- Temperature: 0.7`,
-    `- Timestamp: ${new Date().toISOString()}`
-  ].join("\n");
-
-  await Deno.writeTextFile(evaluationPath, evaluationContent);
-  console.log(`Evaluation results saved to: ${evaluationPath}`);
-
-  // Display evaluation results
-  console.log("\nEvaluation Details:");
-  Object.entries(result.evaluation.criteriaScores).forEach(([criterion, score]) => {
-    console.log(`${criterion}: ${(score.score * 100).toFixed(1)}%`);
-    score.details.forEach(detail => console.log(`  - ${detail}`));
-  });
-
-  if (result.evaluation.recommendations.length > 0) {
-    console.log("\nRecommendations for Improvement:");
-    result.evaluation.recommendations.forEach(rec => console.log(`- ${rec}`));
-  }
 
   // Display usage statistics
   const stats = usageTracker.getUsageStats();
