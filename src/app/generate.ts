@@ -2,7 +2,7 @@ import { join, dirname, fromFileUrl } from "@std/path";
 import { parse } from "@std/flags";
 import {
   generateYogaSequence, usageTracker
-} from "./src/lexikon/mod.ts";
+} from "@paz/lexikon";
 
 
 type Provider = "openai" | "claude" | "gemini" | "groq";
@@ -55,7 +55,7 @@ if (!provider || !PROVIDER_CONFIGS[provider]) {
 
 async function generateYogaFromTemplate(provider: Provider, level: string, duration: string, focus: string) {
   console.log(`Generating yoga sequence using ${provider.toUpperCase()}...`);
-  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "templates", "aileen.txt");
+  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "../../templates", "aileen.txt");
 
   const template = await Deno.readTextFile(templatePath);
   
@@ -70,7 +70,7 @@ async function generateYogaFromTemplate(provider: Provider, level: string, durat
   });
 
   // Save the generated sequence
-  const outputPath = join(dirname(fromFileUrl(import.meta.url)), "output", `yoga-${provider}.md`);
+  const outputPath = join(dirname(fromFileUrl(import.meta.url)), "../../output", `yoga-${provider}.md`);
   await Deno.writeTextFile(outputPath, result);
   console.log(`\nSequence saved to: ${outputPath}`);
 

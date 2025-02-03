@@ -1,138 +1,112 @@
-# Yoga Sequence
+1. Opening (5 minutes)
 
-## Class
+Centering and breath awareness:
+- Sit comfortably in Sukhasana (Easy Pose) or Ardha Siddhasana (Half Lotus Pose)
+- Close your eyes and bring awareness to your natural breath
+- Inhale through the nose, exhale through the nose (3-5 rounds)
 
-This sequence is designed to gently warm up the body, build strength and balance through standing poses, release tension and promote flexibility with floor work, and finally, induce a deep state of relaxation and restoration through yoga nidra. The energy flow starts with a grounding and centering quality, gradually builds intensity, and then returns to a state of stillness and tranquility.
+Gentle warm-up movements:
+- Neck rolls (clockwise and counter-clockwise)
+- Shoulder rolls (forward and backward)
+- Wrist circles (clockwise and counter-clockwise)
+- Ankle rotations (clockwise and counter-clockwise)
 
-### Opening (5 minutes)
+Setting intention:
+- Bring your palms together at your heart center
+- Set a positive intention for your practice (e.g., "I am present, I am focused, I am strong")
 
-1. Centering and Breath Awareness:
-   - Sit comfortably, either cross-legged or on a blanket or block.
-   - Close your eyes and bring your awareness to your breath.
-   - Inhale deeply through your nose, expanding your belly, and exhale slowly through your mouth.
-   - Repeat this cycle of conscious breathing for a few rounds.
+2. Sun Salutations (2 rounds)
 
-2. Gentle Warm-up Movements:
-   - Neck Rolls (Greevaa Chakra): Gently roll your head in a circular motion, first in one direction, then the other.
-   - Shoulder Rolls (Skandha Chakra): Roll your shoulders forward and backward in a circular motion.
-   - Wrist and Ankle Rotations (Manibandha and Gulpha Chakra): Rotate your wrists and ankles in both directions.
+Progressive build-up:
+- Tadasana (Mountain Pose) - ground through your feet, lengthen your spine
+- Urdhva Hastasana (Upward Salute) - inhale, raise your arms overhead
+- Uttanasana (Standing Forward Fold) - exhale, fold forward, lengthen your spine
+- Ardha Uttanasana (Half Standing Forward Fold) - inhale, lift your torso halfway
+- Chaturanga Dandasana (Four-Limbed Staff Pose) - exhale, lower to a plank position
+- Urdhva Mukha Svanasana (Upward-Facing Dog Pose) - inhale, open your chest
+- Adho Mukha Svanasana (Downward-Facing Dog Pose) - exhale, press back into Downward Dog
 
-3. Setting Intention:
-   - Bring your palms together in front of your heart (Anjali Mudra).
-   - Take a few deep breaths and set your intention for this practice.
+Variations appropriate for level:
+- For beginners, modify Chaturanga Dandasana by lowering your knees to the mat
+- For advanced practitioners, add variations like Virabhadrasana I (Warrior I Pose) or Parsvakonasana (Side Angle Pose)
 
-### Sun Salutations (2 rounds)
+Integration of breath with movement:
+- Inhale on backbends and expansive movements
+- Exhale on forward folds and contracting movements
 
-1. Mountain Pose (Tadasana)
-   - Stand with your feet hip-width apart, distribute your weight evenly.
-   - Engage your core, roll your shoulders back, and lift your chest.
-   - Inhale deeply, exhale slowly.
+3. Standing Poses (20 minutes)
 
-2. Upward Salute (Urdhva Hastasana)
-   - Inhale, raise your arms overhead, palms facing each other.
-   - Keep your shoulders relaxed and your gaze forward.
+Balance poses:
+- Vrksasana (Tree Pose) - root down through your standing leg, engage your core, and find a drishti (focal point)
+- Modifications: Use a wall or chair for support, or keep your raised foot on the mat
+- Breathe deeply and evenly, focusing on your balance
 
-3. Standing Forward Fold (Uttanasana)
-   - Exhale, hinge at the hips, and fold your torso over your legs.
-   - Keep your knees bent if needed, and let your arms dangle towards the floor.
+Strength building:
+- Utkatasana (Chair Pose) - engage your quadriceps, keep your knees tracking over your toes
+- Modifications: Use a wall for support, or sit back into an imaginary chair
+- Breathe deeply into your belly, feeling the strength in your legs
 
-4. Halfway Lift (Ardha Uttanasana)
-   - Inhale, lift your torso halfway up, lengthening your spine.
-   - Keep your hands on your shins or thighs for support.
+Alignment focus:
+- Trikonasana (Triangle Pose) - ground down through your feet, extend your arms in opposite directions
+- Key alignment: Keep your front heel in line with your back heel, and your torso parallel to the floor
+- Modifications: Use a block under your hand, or keep your front foot turned in slightly
+- Breathe into the side body, feeling the stretch in your hamstrings and spine
 
-5. Plank Pose (Phalakasana) or Knees-Chest-Chin Pose (Ashtanga Namaskara)
-   - Exhale, step or jump back to a plank position or knees-chest-chin pose.
-   - Engage your core and keep your body in a straight line.
+4. Floor Work (15 minutes)
 
-6. Cobra Pose (Bhujangasana) or Baby Cobra (Ardha Bhujangasana)
-   - Inhale, lower your body to the floor, and lift your chest off the mat.
-   - Keep your elbows tucked in and your shoulders relaxed.
+Hip openers:
+- Anjaneyasana (Low Lunge) - step one foot forward, keep your back knee on the mat
+- Modifications: Use a blanket or block under your back knee for support
+- Breathe deeply, feeling the stretch in your hip flexors and quadriceps
 
-7. Downward-Facing Dog Pose (Adho Mukha Svanasana)
-   - Exhale, tuck your toes under, and lift your hips up and back into Downward-Facing Dog.
-   - Spread your fingers wide, and press your heels towards the floor.
+Spinal twists:
+- Ardha Matsyendrasana (Half Lord of the Fishes Pose) - sit with one leg extended, and twist your torso over the bent knee
+- Modifications: Use a strap or towel around your bent knee for leverage
+- Breathe into the twist, feeling the release in your spine and shoulders
 
-8. Repeat the sequence, moving with your breath.
+Core engagement:
+- Navasana (Boat Pose) - balance on your sitting bones, engage your core muscles
+- Modifications: Bend your knees or keep your feet on the mat
+- Breathe deeply, feeling the strength in your abdominal muscles
 
-### Standing Poses (20 minutes)
+5. Cool Down (10 minutes)
 
-1. Tree Pose (Vrksasana):
-   - Balance on one leg, and place the sole of the opposite foot on your ankle, calf, or inner thigh.
-   - Engage your core and find a focal point to improve balance.
-   - Modification: Use a wall or chair for support.
+Gentle stretches:
+- Supta Padangusthasana (Reclining Hand-to-Big-Toe Pose) - use a strap around your foot to gently stretch your hamstrings
+- Modifications: Bend your knee or keep your leg on the mat
+- Breathe deeply, feeling the release in your hamstrings and lower back
 
-2. Warrior II (Virabhadrasana II)
-   - Step your feet wide, turn your right foot out, and your left foot in.
-   - Bend your right knee over your right ankle, and extend your arms parallel to the floor.
-   - Engage your core and keep your gaze over your front hand.
-   - Modification: Bend your front knee as much as needed for comfort.
+Final relaxation:
+- Savasana (Corpse Pose) - lie on your back, release all effort, and let your body melt into the mat
+- Modifications: Use a blanket or bolster under your knees for support
+- Breathe naturally, feeling the sense of calm and relaxation
 
-3. Reverse Warrior (Viparita Virabhadrasana)
-   - From Warrior II, reach your right arm overhead and arch your back.
-   - Keep your hips squared forward and your gaze up towards your left hand.
-   - Modification: Keep your hand on your thigh instead of reaching back.
+Closing meditation:
+- Bring your awareness back to your breath
+- Silently repeat a mantra or affirmation (e.g., "I am peaceful, I am calm")
+- Slowly open your eyes and return to your practice space
 
-4. Chair Pose (Utkatasana)
-   - Stand with your feet hip-width apart, and bend your knees as if sitting back into a chair.
-   - Raise your arms overhead, keeping your shoulders relaxed.
-   - Engage your core and keep your gaze forward.
-   - Modification: Use a wall for support or don't bend your knees as deeply.
+6. Yoga Nidra (15 min)
 
-### Floor Work (15 minutes)
+- A full yoga nidra experience, guiding you through a deep relaxation and visualization
+- Specific details are not required, as this is a guided meditation led by the instructor
 
-1. Seated Forward Fold (Paschimottanasana)
-   - Sit with your legs extended in front of you, and flex your feet.
-   - Inhale, lengthen your spine, and exhale, fold forward from your hips.
-   - Use a strap around your feet if needed for a deeper stretch.
+Additional considerations:
 
-2. Supine Twist (Supta Matsyendrasana)
-   - Lie on your back, and hug your knees into your chest.
-   - Extend your arms out to the sides, and lower your knees to the left.
-   - Keep your shoulders and head on the mat, and gaze over your right shoulder.
-   - Repeat on the other side.
+Safety precautions:
+- Encourage students to listen to their bodies and modify poses as needed
+- Remind students to stay hydrated and take breaks when necessary
 
-3. Bridge Pose (Setu Bandha Sarvangasana)
-   - Lie on your back, bend your knees, and place your feet flat on the floor.
-   - Engage your core, and lift your hips off the mat, creating a straight line from your knees to your shoulders.
-   - Modification: Place a block or blanket under your sacrum for support.
+Props needed:
+- Yoga mats, blankets, blocks, straps, and bolsters (as needed)
 
-### Cool Down (10 minutes)
+Benefits of each pose:
+- Mention the physical, mental, and emotional benefits of each pose or sequence
 
-1. Seated Straddle (Upavishta Konasana)
-   - Sit with your legs extended wide, and flex your feet.
-   - Inhale, lengthen your spine, and exhale, fold forward from your hips.
-   - Use a strap or block for support if needed.
+Energy flow throughout sequence:
+- Start with gentle movements to build heat and energy
+- Incorporate standing poses for strength and balance
+- Transition to floor work for deeper stretches and relaxation
+- End with a cool down and meditation to restore and rejuvenate
 
-2. Reclining Bound Angle Pose (Supta Baddha Konasana)
-   - Lie on your back, and bring the soles of your feet together, allowing your knees to fall out to the sides.
-   - Place a block or bolster under your sacrum for support if needed.
-
-3. Corpse Pose (Savasana)
-   - Lie on your back, with your arms at your sides, palms facing up.
-   - Relax your entire body, and breathe deeply.
-   - Visualize any remaining tension leaving your body with each exhalation.
-
-### Yoga Nidra (15 minutes)
-
-- Remain in Savasana or find a comfortable seated position.
-- Follow the guidance of the yoga nidra script, allowing your body and mind to fully relax and restore.
-- Emerge feeling refreshed and rejuvenated.
-
-## Safety Precautions
-
-- Warm up properly and listen to your body throughout the practice.
-- Modify poses as needed, and avoid any movements that cause pain or discomfort.
-- Hydrate before and after your practice.
-
-## Props Needed
-
-- Yoga mat
-- Blankets or blocks for support
-- Straps for stretching
-
-## Benefits
-
-- Improves flexibility, balance, and strength.
-- Reduces stress and promotes relaxation.
-- Enhances body awareness and mindfulness.
-- Cultivates a sense of calm and inner peace.
+This sequence aims to provide a well-rounded practice with a focus on slow, mindful movements, breath awareness, and deep relaxation. Modifications and variations are offered to accommodate different levels of experience and ability. Remember to encourage students to listen to their bodies and practice with compassion and self-awareness.
