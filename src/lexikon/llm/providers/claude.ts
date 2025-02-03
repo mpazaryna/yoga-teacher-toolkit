@@ -5,7 +5,7 @@
  * configurable parameters for temperature and token limits.
  */
 
-import type { LLMConfig, LLMResponse, LLMError } from "../../../types.ts";
+import type { LLMConfig, LLMResponse, LLMError } from "../../types.ts";
 import { usageTracker } from "../../monitoring/index.ts";
 
 /**
@@ -44,9 +44,19 @@ const createHeaders = (apiKey: string) => ({
  * standardized LLMError objects for consistent error handling
  */
 const handleError = (error: unknown, startTime?: number): never => {
+  let errorMessage = "Unknown error";
+  
+  if (error instanceof Error) {
+    errorMessage = error.message;
+  } else if (typeof error === 'object' && error !== null) {
+    errorMessage = JSON.stringify(error, null, 2);
+  }
+
+  console.error("Claude API Error Details:", errorMessage);
+  
   const llmError: LLMError = {
     code: "CLAUDE_ERROR",
-    message: error instanceof Error ? error.message : "Unknown error",
+    message: errorMessage,
     provider: "claude"
   };
   
@@ -84,7 +94,7 @@ export const generateContent = async (
   const apiKey = config.apiKey ?? Deno.env.get("ANTHROPIC_API_KEY");
   if (!apiKey) {
     console.error("❌ No API key found!");
-    return handleError({ code: "NO_API_KEY", message: "Missing API key" }, startTime);
+    return handleError(new Error("Missing ANTHROPIC_API_KEY environment variable"), startTime);
   }
 
   const mergedConfig = { ...defaultConfig, ...config };
@@ -112,12 +122,23 @@ export const generateContent = async (
     });
 
     if (!response.ok) {
-      return handleError(await response.json(), startTime);
+      const errorData = await response.json();
+      console.error("Claude API Response Status:", response.status);
+      console.error("Claude API Response Headers:", Object.fromEntries(response.headers.entries()));
+      return handleError({
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData
+      }, startTime);
     }
 
     const data = await response.json();
     console.log("✅ Received response from Claude API");
     
+    if (!data.content || !Array.isArray(data.content) || !data.content[0]?.text) {
+      return handleError(new Error("Invalid response format from Claude API: " + JSON.stringify(data)), startTime);
+    }
+
     const result = {
       content: data.content[0].text,
       usage: {
@@ -136,6 +157,7 @@ export const generateContent = async (
 
     return result;
   } catch (error) {
+    console.error("Claude API Request Error:", error);
     return handleError(error, startTime);
   }
 };

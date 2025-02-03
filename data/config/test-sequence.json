@@ -1,0 +1,24 @@
+{
+  "provider": "claude",
+  "template": "test-context",
+  "sequences": [
+    {
+      "name": "hip-opening",
+      "level": "intermediate",
+      "duration": "75 minutes",
+      "focus": "hip opening and flexibility",
+      "style": "vinyasa",
+      "props": ["blocks", "strap"],
+      "contraindications": ["knee injuries", "hip replacements"]
+    },
+    {
+      "name": "gentle-strength",
+      "level": "beginner",
+      "duration": "45 minutes",
+      "focus": "gentle strength building",
+      "style": "hatha",
+      "props": ["chair", "blocks"],
+      "contraindications": ["high blood pressure"]
+    }
+  ]
+} 

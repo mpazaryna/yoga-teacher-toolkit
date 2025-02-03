@@ -8,13 +8,13 @@
 import type { YogaGeneratorOptions } from "../types.ts";
 import { BaseGenerator } from "./base.ts";
 
-// Function to generate a 5 character alphanumeric ID
-function generateShortId(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  return Array.from(
-    { length: 5 },
-    () => chars.charAt(Math.floor(Math.random() * chars.length))
-  ).join('');
+interface YogaContext {
+  level: string;
+  duration: string;
+  focus: string;
+  style?: string;
+  props?: string[];
+  contraindications?: string[];
 }
 
 /**
@@ -37,7 +37,6 @@ export class YogaGenerator extends BaseGenerator {
    */
   constructor(options: YogaGeneratorOptions) {
     const baseOptions = {
-      provider: options.provider,
       level: "beginner",
       duration: "60 minutes",
       focus: "strength and flexibility",
@@ -45,6 +44,13 @@ export class YogaGenerator extends BaseGenerator {
     };
     super(baseOptions);
     this.options = baseOptions;
+
+    // Set up base context for yoga generation
+    this.setBaseContext({
+      level: this.options.level,
+      duration: this.options.duration,
+      focus: this.options.focus,
+    });
   }
 
   /**
@@ -62,14 +68,48 @@ export class YogaGenerator extends BaseGenerator {
   /**
    * @protected
    * @method buildPrompt
-   * @param {string} template - The base template to use for prompt construction
-   * @returns {string} The complete prompt with yoga-specific parameters
-   * @description Constructs the final prompt by combining the template with
-   * the teaching concept built from level, duration, and focus parameters
+   * @param {string} template - The template content to build upon
+   * @returns {string} The final prompt for the LLM
+   * @description Combines the template with both injected context values and a
+   * standardized concept description for the sequence.
    */
-  protected buildPrompt(template: string): string {
+  protected override buildPrompt(template: string): string {
+    // The template already has context values injected by the base class
+    // Now we'll add our concept description if the template has the placeholder
     const concept = this.buildConcept();
     return template.replace("{CONCEPT}", concept);
+  }
+
+  /**
+   * @protected
+   * @method validateYogaSequence
+   * @param {string} sequence - The generated sequence to validate
+   * @returns {boolean} Whether the sequence is valid
+   */
+  protected validateYogaSequence(sequence: string): boolean {
+    // Basic validation - can be enhanced with more specific rules
+    if (!sequence.trim()) return false;
+    
+    // Check for basic structure (warmup, main sequence, cooldown)
+    const hasWarmup = /warm[- ]?up|preparation|beginning/i.test(sequence);
+    const hasCooldown = /cool[- ]?down|closing|savasana|relaxation/i.test(sequence);
+    
+    return hasWarmup && hasCooldown;
+  }
+
+  /**
+   * @public
+   * @async
+   * @method generateSequence
+   * @param {Partial<YogaContext>} context - Additional context for sequence generation
+   * @returns {Promise<string>} The generated yoga sequence
+   */
+  async generateSequence(context: Partial<YogaContext> = {}): Promise<string> {
+    return this.generateWithContext(context, {
+      validateResponse: true,
+      maxRetries: 3,
+      temperature: 0.7
+    });
   }
 }
 
@@ -83,5 +123,5 @@ export class YogaGenerator extends BaseGenerator {
  */
 export async function generateYogaSequence(options: YogaGeneratorOptions): Promise<string> {
   const generator = new YogaGenerator(options);
-  return await generator.generate();
+  return await generator.generateSequence();
 } 
