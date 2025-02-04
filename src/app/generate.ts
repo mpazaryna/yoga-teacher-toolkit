@@ -1,8 +1,8 @@
 import { join, dirname, fromFileUrl } from "https://deno.land/std@0.219.0/path/mod.ts";
-import { generateYogaSequence } from "../functional/generators/yoga.ts";
+import { generateYogaSequence } from "../generators/yoga.ts";
 import { parse } from "https://deno.land/std@0.219.0/flags/mod.ts";
 import { ensureDir } from "https://deno.land/std@0.219.0/fs/mod.ts";
-import type { YogaConfig } from "../functional/types.ts";
+import type { YogaConfig } from "../generators/types.ts";
 import type { ProviderType } from "../llm/types.ts";
 import { usageTracker } from "../llm/tracker.ts";
 

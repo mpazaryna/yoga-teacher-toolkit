@@ -3,8 +3,8 @@
  * @description Utility functions for template loading and processing
  */
 
-import { loadFile } from "../../context/handler.ts";
-import type { TemplateConfig, ContextData } from "../types.ts";
+import { loadFile } from "../context/handler.ts";
+import type { TemplateConfig, ContextData } from "./types.ts";
 
 /**
  * Loads a template from various sources based on the template configuration

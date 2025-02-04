@@ -1,6 +1,6 @@
 import { assertEquals, assertRejects } from "https://deno.land/std@0.219.0/assert/mod.ts";
-import { generateYogaSequence } from "../../src/functional/generators/yoga.ts";
-import type { YogaConfig } from "../../src/functional/types.ts";
+import { generateYogaSequence } from "../../src/generators/yoga.ts";
+import type { YogaConfig } from "../../src/generators/types.ts";
 import type { ProviderType } from "../../src/llm/types.ts";
 
 // Set the provider to use for tests

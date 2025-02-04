@@ -3,7 +3,7 @@
  * @description Utility function for retrying operations with exponential backoff
  */
 
-import type { RetryOptions } from "../types.ts";
+import type { RetryOptions } from "./types.ts";
 
 /**
  * Executes a function with retry logic and exponential backoff
