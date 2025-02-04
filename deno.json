@@ -5,6 +5,8 @@
     "@std/flags": "https://deno.land/std@0.219.0/flags/mod.ts",
     "@std/yaml": "https://deno.land/std@0.219.0/yaml/mod.ts",
     "@std/assert": "https://deno.land/std@0.219.0/assert/mod.ts",
+    "@/": "./src/",
+    "~/": "./tests/",
     "@data": "./data",
     "@templates": "./data/templates",
     "@output": "./data/output",

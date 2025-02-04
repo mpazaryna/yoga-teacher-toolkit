@@ -6,8 +6,8 @@
  * and other advanced language models.
  */
 
-import type { LLMConfig, LLMResponse, LLMError } from "../../../types.ts";
-import { usageTracker } from "../../monitoring/index.ts";
+import type { LLMConfig, LLMResponse, LLMError } from "../types.ts";
+import { usageTracker } from "../tracker.ts";
 
 /**
  * @constant

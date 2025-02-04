@@ -5,7 +5,7 @@
  * across different LLM providers.
  */
 
-import type { ProviderType, LLMResponse } from "../../types.ts";
+import type { ProviderType, LLMResponse } from "./types.ts";
 
 export interface UsageMetrics {
   timestamp: number;
