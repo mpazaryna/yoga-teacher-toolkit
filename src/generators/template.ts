@@ -3,7 +3,6 @@
  * @description Utility functions for template loading and processing
  */
 
-import { loadFile } from "../context/handler.ts";
 import type { TemplateConfig, ContextData } from "./types.ts";
 
 /**
@@ -19,9 +18,14 @@ export const loadTemplate = async (template: TemplateConfig): Promise<string> =>
   
   if ('path' in template) {
     console.log(`📂 Loading template from: ${template.path}`);
-    const content = await loadFile(template.path);
-    console.log("✅ Template loaded successfully");
-    return content;
+    try {
+      const content = await Deno.readTextFile(template.path);
+      console.log("✅ Template loaded successfully");
+      return content;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to load template: ${message}`);
+    }
   }
   
   if ('name' in template) {
