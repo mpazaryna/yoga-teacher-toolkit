@@ -21,7 +21,7 @@
     "approve": "deno run --allow-read --allow-write src/app/approve.ts",
     "list:drafts": "deno run --allow-read src/app/list.ts --status=draft",
     "list:approved": "deno run --allow-read src/app/list.ts --status=approved",
-    "test:sequence": "deno run --allow-read --allow-write --allow-env --allow-net src/app/test.ts",
-    "test:sequence:single": "deno run --allow-read --allow-write --allow-env --allow-net src/app/test.ts --sequence"
+    "test:sequence": "deno run --allow-read --allow-write --allow-env --allow-net src/app/generate.ts",
+    "test:sequence:single": "deno run --allow-read --allow-write --allow-env --allow-net src/app/generate.ts --sequence"
   }
 }

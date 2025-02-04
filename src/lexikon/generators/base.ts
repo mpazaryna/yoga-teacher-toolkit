@@ -6,6 +6,8 @@
 
 import { createProvider } from "../llm/factory.ts";
 import { loadFile } from "../context/handler.ts";
+import { getProviderConfig } from "../llm/config.ts";
+import { TemplateManager } from "../context/templates.ts";
 import type { BaseGeneratorOptions, ProviderType } from "../types.ts";
 
 interface GenerationOptions {
@@ -27,17 +29,29 @@ interface ContextData {
 export abstract class BaseGenerator {
   protected options: BaseGeneratorOptions;
   protected baseContext: ContextData = {};
+  protected templateManager?: TemplateManager;
 
   /**
    * @constructor
    * @param {BaseGeneratorOptions} options - Base configuration for the generator
    */
   constructor(options: BaseGeneratorOptions) {
+    const providerConfig = getProviderConfig(options.provider as ProviderType);
     this.options = {
       temperature: 0.7,
-      maxTokens: 4000,
+      maxTokens: providerConfig.maxTokens,
+      model: providerConfig.model,
       ...options,
     };
+  }
+
+  /**
+   * @protected
+   * @method setTemplateManager
+   * @param {TemplateManager} manager - Template manager instance
+   */
+  protected setTemplateManager(manager: TemplateManager): void {
+    this.templateManager = manager;
   }
 
   /**
@@ -65,12 +79,19 @@ export abstract class BaseGenerator {
    * @returns {Promise<string>} The loaded template content
    */
   protected async loadTemplate(): Promise<string> {
-    const { template, templatePath } = this.options;
+    const { template, templatePath, templateName } = this.options;
     
     if (template) {
       console.log("📝 Using provided template string");
       return template;
     } 
+
+    if (this.templateManager && templateName) {
+      console.log(`📂 Loading template: ${templateName}`);
+      const templateInfo = await this.templateManager.loadTemplate(templateName);
+      console.log("✅ Template loaded successfully");
+      return templateInfo.content;
+    }
     
     if (templatePath) {
       console.log(`📂 Loading template from: ${templatePath}`);
@@ -79,7 +100,7 @@ export abstract class BaseGenerator {
       return content;
     }
     
-    throw new Error("Either template or templatePath must be provided");
+    throw new Error("Either template, templateName, or templatePath must be provided");
   }
 
   /**

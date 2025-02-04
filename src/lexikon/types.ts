@@ -36,6 +36,7 @@ export interface BaseGeneratorOptions {
   model?: string;
   template?: string;
   templatePath?: string;
+  templateName?: string;
 }
 
 // Story Generator Types
@@ -44,8 +45,11 @@ export interface StoryGeneratorOptions extends Omit<BaseGeneratorOptions, 'outpu
 }
 
 // Yoga Generator Types
-export interface YogaGeneratorOptions extends Omit<BaseGeneratorOptions, 'outputFile'> {
+export interface YogaGeneratorOptions extends BaseGeneratorOptions {
   level?: string;
   duration?: string;
   focus?: string;
+  style?: string;
+  props?: string[];
+  contraindications?: string[];
 } 

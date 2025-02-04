@@ -1,3 +1,5 @@
+/// <reference types="https://deno.land/x/deno@v1.40.5/mod.ts" />
+
 /**
  * @module YogaGenerator
  * @description A specialized generator module for creating yoga sequences using various LLM providers.
@@ -15,6 +17,7 @@ interface YogaContext {
   style?: string;
   props?: string[];
   contraindications?: string[];
+  concept?: string;
 }
 
 /**
@@ -50,6 +53,9 @@ export class YogaGenerator extends BaseGenerator {
       level: this.options.level,
       duration: this.options.duration,
       focus: this.options.focus,
+      style: this.options.style,
+      props: this.options.props,
+      contraindications: this.options.contraindications,
     });
   }
 

@@ -1,9 +1,54 @@
 import { join, dirname, fromFileUrl } from "@std/path";
+import { generateYogaSequence, usageTracker, type ProviderType } from "@paz/lexikon";
 import { parse } from "@std/flags";
 import { ensureDir } from "@std/fs";
-import {
-  generateYogaSequence, usageTracker
-} from "@paz/lexikon";
+
+interface SequenceConfig {
+  name: string;
+  level: string;
+  duration: string;
+  focus: string;
+  style?: string;
+  props?: string[];
+  contraindications?: string[];
+  concept: string;
+}
+
+interface TestConfig {
+  provider: string;
+  template: string;
+  sequences: SequenceConfig[];
+}
+
+interface ProviderConfig {
+  model: string;
+  maxTokens: number;
+}
+
+type ProviderConfigs = Record<string, ProviderConfig>;
+
+// Function to load provider configurations
+async function loadProviderConfigs(): Promise<ProviderConfigs> {
+  try {
+    const configPath = join(dirname(fromFileUrl(import.meta.url)), 
+                          "../../data/config/providers.json");
+    const content = await Deno.readTextFile(configPath);
+    return JSON.parse(content);
+  } catch (error) {
+    console.error("Error loading provider configurations:", error);
+    throw new Error("Failed to load provider configurations. Please ensure data/config/providers.json exists and is valid.");
+  }
+}
+
+async function loadConfig(configPath: string): Promise<TestConfig> {
+  try {
+    const content = await Deno.readTextFile(configPath);
+    return JSON.parse(content);
+  } catch (error) {
+    console.error(`Error loading config from ${configPath}:`, error);
+    throw error;
+  }
+}
 
 // Function to generate a 5 character alphanumeric ID
 function generateShortId(): string {
@@ -14,146 +59,136 @@ function generateShortId(): string {
   ).join('');
 }
 
-// Ensure output directory exists
-async function ensureOutputDir(dirPath: string) {
-  try {
-    await Deno.stat(dirPath);
-  } catch (error) {
-    if (error instanceof Deno.errors.NotFound) {
-      await Deno.mkdir(dirPath, { recursive: true });
-    } else {
-      throw error;
-    }
+async function generateTestSequence(
+  config: TestConfig,
+  providerConfigs: ProviderConfigs,
+  sequenceName?: string
+): Promise<void> {
+  const sequences = sequenceName
+    ? config.sequences.filter(s => s.name === sequenceName)
+    : config.sequences;
+
+  if (sequenceName && sequences.length === 0) {
+    console.error(`No sequence found with name: ${sequenceName}`);
+    return;
   }
-}
 
-type Provider = "openai" | "claude" | "gemini" | "groq";
+  const providerConfig = providerConfigs[config.provider];
+  if (!providerConfig) {
+    throw new Error(`Unsupported provider: ${config.provider}. Available providers: ${Object.keys(providerConfigs).join(", ")}`);
+  }
 
-interface ProviderConfig {
-  model: string;
-  maxTokens: number;
-}
+  for (const sequence of sequences) {
+    console.log(`\nGenerating sequence: ${sequence.name}`);
+    console.log("----------------------------------------");
 
-const PROVIDER_CONFIGS: Record<Provider, ProviderConfig> = {
-  openai: {
-    model: "gpt-4",
-    maxTokens: 4000,
-  },
-  claude: {
-    model: "claude-3-sonnet-20240229",
-    maxTokens: 4000,
-  },
-  gemini: {
-    model: "gemini-pro",
-    maxTokens: 4000,
-  },
-  groq: {
-    model: "mixtral-8x7b-32768",
-    maxTokens: 4000,
-  },
-};
+    try {
+      // Read template content
+      const templatePath = join(dirname(fromFileUrl(import.meta.url)), 
+                         `../../data/templates/${config.template}`);
+      const template = await Deno.readTextFile(templatePath);
 
-// Parse command line arguments
-const flags = parse(Deno.args, {
-  string: ["provider", "level", "duration", "focus", "template"],
-  default: {
-    level: "intermediate",
-    duration: "60 minutes",
-    focus: "strength and flexibility",
-    template: "aileen"
-  },
-});
+      const result = await generateYogaSequence({
+        provider: config.provider as ProviderType,
+        temperature: 0.7,
+        ...providerConfig,
+        template,
+        level: sequence.level,
+        duration: sequence.duration,
+        focus: sequence.focus,
+        style: sequence.style,
+        props: sequence.props,
+        contraindications: sequence.contraindications,
+        concept: sequence.concept
+      });
 
-const provider = flags.provider as Provider;
-if (!provider || !PROVIDER_CONFIGS[provider]) {
-  console.error("Please specify a valid provider: openai, claude, gemini, or groq");
-  console.error("\nUsage:");
-  console.error("  deno run --allow-read --allow-write generate.ts --provider=claude [options]");
-  console.error("\nOptions:");
-  console.error("  --level=<string>         Difficulty level (default: intermediate)");
-  console.error("  --duration=<string>      Session duration (default: 60 minutes)");
-  console.error("  --focus=<string>         Practice focus (default: strength and flexibility)");
-  console.error("  --template=<string>      Template to use (default: aileen)");
-  Deno.exit(1);
-}
+      // Generate unique ID
+      const uniqueId = generateShortId();
 
-async function generateYogaFromTemplate(provider: Provider, level: string, duration: string, focus: string, templateName: string) {
-  console.log(`Generating yoga sequence using ${provider.toUpperCase()}...`);
-  const templatePath = join(dirname(fromFileUrl(import.meta.url)), "../../data/templates", `${templateName}.txt`);
+      // Create output directory
+      const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
+      await ensureDir(outputDir);
 
-  try {
-    const template = await Deno.readTextFile(templatePath);
-    
-    const result = await generateYogaSequence({
-      provider,
-      temperature: 0.7,
-      ...PROVIDER_CONFIGS[provider],
-      template,
-      level,
-      duration,
-      focus
-    });
+      // Prepare metadata header
+      const metadata = [
+        "---",
+        `id: ${uniqueId}`,
+        `date: ${new Date().toISOString()}`,
+        `provider: ${config.provider}`,
+        `model: ${providerConfig.model}`,
+        `template: ${config.template}`,
+        `level: ${sequence.level}`,
+        `duration: ${sequence.duration}`,
+        `focus: ${sequence.focus}`,
+        sequence.style ? `style: ${sequence.style}` : null,
+        sequence.props ? `props: ${JSON.stringify(sequence.props)}` : null,
+        sequence.contraindications ? `contraindications: ${JSON.stringify(sequence.contraindications)}` : null,
+        sequence.concept ? `concept: ${JSON.stringify(sequence.concept)}` : null,
+        "status: draft",
+        "---",
+        "",
+        result
+      ].filter(Boolean).join("\n");
 
-    // Create unique ID
-    const uniqueId = generateShortId();
+      // Save the result with unique ID
+      const outputPath = join(outputDir, `${uniqueId}-${sequence.name}-${config.template}`);
+      await Deno.writeTextFile(outputPath, metadata);
+      console.log(`✅ Sequence saved to: ${outputPath}`);
 
-    // Ensure output directory exists
-    const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
-    await ensureDir(outputDir);
-
-    // Save the generated sequence with unique ID prefix
-    const outputPath = join(outputDir, `${uniqueId}-${templateName}.md`);
-    
-    // Add metadata header to the output
-    const outputContent = [
-      "---",
-      `id: ${uniqueId}`,
-      `date: ${new Date().toISOString()}`,
-      `provider: ${provider}`,
-      `template: ${templateName}`,
-      `level: ${level}`,
-      `duration: ${duration}`,
-      `focus: ${focus}`,
-      "status: draft",
-      "---",
-      "",
-      result
-    ].join("\n");
-
-    await Deno.writeTextFile(outputPath, outputContent);
-    console.log(`\nSequence saved to: ${outputPath}`);
-
-    // Display usage statistics
-    const stats = usageTracker.getUsageStats();
-    console.log("\nUsage Statistics:");
-    console.log(`Total API calls: ${stats.totalCalls}`);
-    console.log(`Success rate: ${stats.successRate.toFixed(1)}%`);
-    console.log(`Average latency: ${stats.averageLatency.toFixed(0)}ms`);
-    console.log(`Total tokens used: ${stats.totalTokens}`);
-    console.log(`Estimated cost: $${stats.totalCost.toFixed(4)}`);
-    
-    if (stats.usageByProvider[provider]) {
-      console.log(`Tokens used by ${provider}: ${stats.usageByProvider[provider]}`);
-    }
-
-    // Print the unique ID for reference
-    console.log(`\nSequence ID: ${uniqueId}`);
-  } catch (error) {
-    if (error instanceof Deno.errors.NotFound) {
-      console.error(`Template '${templateName}' not found at ${templatePath}`);
-      console.error("\nAvailable templates:");
-      for await (const dirEntry of Deno.readDir(join(dirname(fromFileUrl(import.meta.url)), "../../data/templates"))) {
-        if (dirEntry.isFile && dirEntry.name.endsWith(".txt")) {
-          console.error(`  - ${dirEntry.name.replace(".txt", "")}`);
-        }
+      // Display usage statistics
+      const stats = usageTracker.getUsageStats();
+      console.log("\nUsage Statistics:");
+      console.log(`Total API calls: ${stats.totalCalls}`);
+      console.log(`Success rate: ${stats.successRate.toFixed(1)}%`);
+      console.log(`Average latency: ${stats.averageLatency.toFixed(0)}ms`);
+      console.log(`Total tokens used: ${stats.totalTokens}`);
+      console.log(`Estimated cost: $${stats.totalCost.toFixed(4)}`);
+      
+      if (stats.usageByProvider[config.provider]) {
+        console.log(`Tokens used by ${config.provider}: ${stats.usageByProvider[config.provider]}`);
       }
-      Deno.exit(1);
+
+      console.log(`\nSequence ID: ${uniqueId}`);
+    } catch (error) {
+      if (error instanceof Deno.errors.NotFound) {
+        console.error(`Template '${config.template}' not found`);
+        console.error("\nAvailable templates:");
+        for await (const dirEntry of Deno.readDir(join(dirname(fromFileUrl(import.meta.url)), "../../data/templates"))) {
+          if (dirEntry.isFile) {
+            console.error(`  - ${dirEntry.name}`);
+          }
+        }
+        continue;
+      }
+      console.error(`❌ Error generating sequence ${sequence.name}:`, error);
     }
-    throw error;
   }
 }
 
-// If this module is run directly, generate sequences for all providers
 if (import.meta.main) {
-  await generateYogaFromTemplate(provider, flags.level, flags.duration, flags.focus, flags.template);
+  const flags = parse(Deno.args, {
+    string: ["config", "sequence"],
+    default: {
+      config: "data/config/test-sequence.json"
+    },
+  });
+
+  const configPath = join(dirname(fromFileUrl(import.meta.url)), 
+                         `../../${flags.config}`);
+  
+  try {
+    const [config, providerConfigs] = await Promise.all([
+      loadConfig(configPath),
+      loadProviderConfigs()
+    ]);
+    await generateTestSequence(config, providerConfigs, flags.sequence);
+  } catch (error) {
+    console.error("Failed to run test generation:", error);
+    console.error("\nUsage:");
+    console.error("  deno run --allow-read --allow-write test.ts [options]");
+    console.error("\nOptions:");
+    console.error("  --config=<string>    Path to test configuration file (default: data/config/test-sequence.json)");
+    console.error("  --sequence=<string>  Name of specific sequence to generate (optional)");
+    Deno.exit(1);
+  }
 } 

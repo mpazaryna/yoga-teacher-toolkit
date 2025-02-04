@@ -3,7 +3,9 @@ export * from "./types.ts";
 
 // Export core functionality
 export * from "./llm/factory.ts";
+export * from "./llm/config.ts";
 export * from "./context/handler.ts";
+export * from "./context/templates.ts";
 
 // Provider exports
 export { generateContent as claudeProvider } from "./llm/providers/claude.ts";
