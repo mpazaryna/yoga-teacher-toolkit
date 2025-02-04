@@ -12,12 +12,6 @@
     "@setlists": "./data/setlists"
   },
   "tasks": {
-    "dev": "deno run --allow-read --allow-write src/app/generate.ts",
-    "improve": "deno run --allow-read --allow-write src/app/improve.ts",
-    "generate": "deno run --allow-read --allow-write src/app/generate.ts",
-    "generate:aileen": "deno task generate --provider=claude --template=aileen",
-    "generate:hatha": "deno task generate --provider=claude --template=hatha",
-    "generate:vinyasa": "deno task generate --provider=claude --template=vinyasa",
     "approve": "deno run --allow-read --allow-write src/app/approve.ts",
     "list:drafts": "deno run --allow-read src/app/list.ts --status=draft",
     "list:approved": "deno run --allow-read src/app/list.ts --status=approved",
