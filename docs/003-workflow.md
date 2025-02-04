@@ -4,18 +4,17 @@ This document outlines the complete workflow for generating, managing, and appro
 
 ## Directory Structure
 
-```
+```ascii
 yoga-sequence-generator/
 ├── data/
 │   ├── templates/    # Yoga sequence templates
-│   ├── output/      # Generated draft sequences
-│   └── setlists/    # Approved sequences ready for use
+│   ├── output/       # Generated draft sequences
+│   └── setlists/     # Approved sequences ready for use
 └── src/
     └── app/
         ├── generate.ts   # Sequence generation script
-        ├── improve.ts    # Sequence improvement script
         ├── approve.ts    # Sequence approval script
-        └── list.ts      # Sequence listing utility
+        └── list.ts       # Sequence listing utility
 ```
 
 ## Generating Sequences
