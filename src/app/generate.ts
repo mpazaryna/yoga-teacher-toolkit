@@ -1,5 +1,5 @@
 import { join, dirname, fromFileUrl } from "@std/path";
-import { generateYogaSequence, usageTracker, type ProviderType } from "@paz/lexikon";
+import { generateYogaSequence, usageTracker, type ProviderType } from "../mod.ts";
 import { parse } from "@std/flags";
 import { ensureDir } from "@std/fs";
 
@@ -28,7 +28,7 @@ interface ProviderConfig {
 type ProviderConfigs = Record<string, ProviderConfig>;
 
 // Function to load provider configurations
-async function loadProviderConfigs(): Promise<ProviderConfigs> {
+export async function loadProviderConfigs(): Promise<ProviderConfigs> {
   try {
     const configPath = join(dirname(fromFileUrl(import.meta.url)), 
                           "../../data/config/providers.json");
@@ -40,7 +40,7 @@ async function loadProviderConfigs(): Promise<ProviderConfigs> {
   }
 }
 
-async function loadConfig(configPath: string): Promise<TestConfig> {
+export async function loadConfig(configPath: string): Promise<TestConfig> {
   try {
     const content = await Deno.readTextFile(configPath);
     return JSON.parse(content);
@@ -59,7 +59,7 @@ function generateShortId(): string {
   ).join('');
 }
 
-async function generateTestSequence(
+export async function generateTestSequence(
   config: TestConfig,
   providerConfigs: ProviderConfigs,
   sequenceName?: string
