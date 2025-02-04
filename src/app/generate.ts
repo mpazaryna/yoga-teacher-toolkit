@@ -1,7 +1,10 @@
-import { join, dirname, fromFileUrl } from "@std/path";
-import { generateYogaSequence, usageTracker, type ProviderType } from "../mod.ts";
-import { parse } from "@std/flags";
-import { ensureDir } from "@std/fs";
+import { join, dirname, fromFileUrl } from "https://deno.land/std@0.219.0/path/mod.ts";
+import { generateYogaSequence } from "../functional/generators/yoga.ts";
+import { parse } from "https://deno.land/std@0.219.0/flags/mod.ts";
+import { ensureDir } from "https://deno.land/std@0.219.0/fs/mod.ts";
+import type { YogaConfig } from "../functional/types.ts";
+import type { ProviderType } from "../llm/types.ts";
+import { usageTracker } from "../llm/tracker.ts";
 
 interface SequenceConfig {
   name: string;
@@ -92,15 +95,19 @@ export async function generateTestSequence(
         provider: config.provider as ProviderType,
         temperature: 0.7,
         ...providerConfig,
-        template,
+        template: {
+          path: templatePath,
+          context: {
+            concept: sequence.concept
+          }
+        },
         level: sequence.level,
         duration: sequence.duration,
         focus: sequence.focus,
         style: sequence.style,
         props: sequence.props,
-        contraindications: sequence.contraindications,
-        concept: sequence.concept
-      });
+        contraindications: sequence.contraindications
+      } as YogaConfig);
 
       // Generate unique ID
       const uniqueId = generateShortId();
