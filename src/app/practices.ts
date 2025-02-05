@@ -1,7 +1,7 @@
 import { join, dirname, fromFileUrl } from "https://deno.land/std@0.219.0/path/mod.ts";
 import { parse } from "https://deno.land/std@0.219.0/flags/mod.ts";
 import { ensureDir } from "https://deno.land/std@0.219.0/fs/mod.ts";
-import { generate, type ContentConfig } from "../generators/template-generator.ts";
+import { generate, type ContentConfig } from "../content/generator-template.ts";
 import type { ProviderType } from "../llm/types.ts";
 import { usageTracker } from "../llm/tracker.ts";
 
@@ -247,7 +247,7 @@ if (import.meta.main) {
   const flags = parse(Deno.args, {
     string: ["config", "sequence"],
     default: {
-      config: "data/config/test-sequence.json"
+      config: "data/config/dharma-config.json"
     },
   });
 
@@ -263,9 +263,9 @@ if (import.meta.main) {
   } catch (error) {
     console.error("Failed to run test generation:", error);
     console.error("\nUsage:");
-    console.error("  deno run --allow-read --allow-write generate.ts [options]");
+    console.error("  deno run --allow-read --allow-write content-strategy.ts [options]");
     console.error("\nOptions:");
-    console.error("  --config=<string>    Path to test configuration file (default: data/config/test-sequence.json)");
+    console.error("  --config=<string>    Path to test configuration file (default: data/config/dharma-config.json)");
     console.error("  --sequence=<string>  Name of specific sequence to generate (optional)");
     Deno.exit(1);
   }

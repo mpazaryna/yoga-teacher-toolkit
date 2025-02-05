@@ -12,9 +12,17 @@ yoga-sequence-generator/
 │   └── setlists/     # Approved sequences ready for use
 └── src/
     └── app/
-        ├── generate.ts   # Sequence generation script
-        ├── approve.ts    # Sequence approval script
-        └── list.ts       # Sequence listing utility
+        ├── approve.ts    # Content approval script
+        ├── practices.ts  # Practice type implementations
+        └── list.ts      # Content listing script
+├── content/
+│   ├── generator-template.ts   # Content generation template method
+│   ├── retry.ts     # Retry logic for generation
+│   ├── template.ts  # Template loading and processing
+│   └── types.ts     # Shared type definitions
+└── llm/
+    ├── factory.ts   # LLM provider factory
+    └── types.ts     # LLM-related type definitions
 ```
 
 ## Generating Sequences

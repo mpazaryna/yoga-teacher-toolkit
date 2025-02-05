@@ -15,6 +15,6 @@ deno run --reload=jsr:@paz/lexikon --allow-net --allow-env cli_generators.ts 3
 ```
 
 ```bash
-deno run --allow-read --allow-write src/app/generate.ts --provider=claude --level=beginner --duration="45 minutes" --focus="flexibility"
+deno run --allow-read --allow-write src/app/content-strategy.ts --provider=claude --level=beginner --duration="45 minutes" --focus="flexibility"
 deno run --allow-read --allow-write improve.ts --provider=claude --iterations=2
 ```
