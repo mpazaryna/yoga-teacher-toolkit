@@ -1,5 +1,5 @@
 {
-  "provider": "claude",
+  "provider": "gemini",
   "template": "sequence-prompt.md",
   "sequences": [
     {

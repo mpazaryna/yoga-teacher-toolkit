@@ -1,0 +1,24 @@
+{
+  "provider": "gemini",
+  "template": "dharma-prompt.md",
+  "talks": [
+    {
+      "name": "compassion-practice",
+      "focus": "cultivating compassion",
+      "style": "secular",
+      "duration": "30 minutes",
+      "scriptureReference": "Metta Sutta",
+      "targetAudience": "beginners",
+      "concept": "An exploration of how we can develop genuine compassion for ourselves and others through Buddhist teachings and practical meditation techniques"
+    },
+    {
+      "name": "mindful-relationships",
+      "focus": "mindfulness in relationships",
+      "style": "contemporary",
+      "duration": "45 minutes",
+      "scriptureReference": "Sigalovada Sutta",
+      "targetAudience": "intermediate practitioners",
+      "concept": "Understanding how mindfulness practice can transform our relationships by developing presence, emotional awareness, and skillful communication"
+    }
+  ]
+}

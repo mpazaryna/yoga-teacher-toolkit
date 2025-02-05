@@ -17,10 +17,21 @@ interface SequenceConfig {
   concept: string;
 }
 
+interface DharmaTalkConfig {
+  name: string;
+  focus: string;
+  style?: string;
+  duration?: string;
+  scriptureReference?: string;
+  targetAudience?: string;
+  concept: string;
+}
+
 interface TestConfig {
   provider: string;
   template: string;
-  sequences: SequenceConfig[];
+  sequences?: SequenceConfig[];
+  talks?: DharmaTalkConfig[];
 }
 
 interface ProviderConfig {
@@ -65,49 +76,71 @@ function generateShortId(): string {
 export async function generateTestSequence(
   config: TestConfig,
   providerConfigs: ProviderConfigs,
-  sequenceName?: string
+  itemName?: string
 ): Promise<void> {
-  const sequences = sequenceName
-    ? config.sequences.filter(s => s.name === sequenceName)
-    : config.sequences;
+  // Handle both sequences and talks
+  const items = config.sequences 
+    ? config.sequences 
+    : config.talks 
+      ? config.talks 
+      : [];
+      
+  const type = config.sequences ? 'sequence' : 'talk';
+  
+  const selectedItems = itemName
+    ? items.filter(s => s.name === itemName)
+    : items;
 
-  if (sequenceName && sequences.length === 0) {
-    console.error(`No sequence found with name: ${sequenceName}`);
+  if (itemName && selectedItems.length === 0) {
+    console.error(`No ${type} found with name: ${itemName}`);
     return;
   }
 
   const providerConfig = providerConfigs[config.provider];
   if (!providerConfig) {
-    throw new Error(`Unsupported provider: ${config.provider}. Available providers: ${Object.keys(providerConfigs).join(", ")}`);
+    throw new Error(`Unsupported provider: ${config.provider}`);
   }
 
-  for (const sequence of sequences) {
-    console.log(`\nGenerating sequence: ${sequence.name}`);
+  for (const item of selectedItems) {
+    console.log(`\nGenerating ${type}: ${item.name}`);
     console.log("----------------------------------------");
 
     try {
-      // Read template content
       const templatePath = join(dirname(fromFileUrl(import.meta.url)), 
                          `../../data/templates/${config.template}`);
       const template = await Deno.readTextFile(templatePath);
 
-      const result = await generateYogaSequence({
+      const baseConfig = {
         provider: config.provider as ProviderType,
         temperature: 0.7,
         ...providerConfig,
         template: {
           path: templatePath,
           context: {
-            concept: sequence.concept
+            concept: item.concept
           }
         },
-        level: sequence.level,
-        duration: sequence.duration,
-        focus: sequence.focus,
-        style: sequence.style,
-        props: sequence.props,
-        contraindications: sequence.contraindications
-      } as YogaConfig);
+        focus: item.focus,
+        style: item.style,
+      };
+
+      const result = await generateYogaSequence(
+        'level' in item 
+          ? {
+              ...baseConfig,
+              level: item.level,
+              duration: item.duration,
+              props: item.props,
+              contraindications: item.contraindications,
+            } as YogaConfig
+          : {
+              ...baseConfig,
+              concept: item.concept,
+              duration: item.duration,
+              scriptureReference: item.scriptureReference,
+              targetAudience: item.targetAudience,
+            } as DharmaTalkConfig
+      );
 
       // Generate unique ID
       const uniqueId = generateShortId();
@@ -124,13 +157,23 @@ export async function generateTestSequence(
         `provider: ${config.provider}`,
         `model: ${providerConfig.model}`,
         `template: ${config.template}`,
-        `level: ${sequence.level}`,
-        `duration: ${sequence.duration}`,
-        `focus: ${sequence.focus}`,
-        sequence.style ? `style: ${sequence.style}` : null,
-        sequence.props ? `props: ${JSON.stringify(sequence.props)}` : null,
-        sequence.contraindications ? `contraindications: ${JSON.stringify(sequence.contraindications)}` : null,
-        sequence.concept ? `concept: ${JSON.stringify(sequence.concept)}` : null,
+        ...('level' in item 
+          ? [
+              `level: ${item.level}`,
+              `duration: ${item.duration}`,
+              `focus: ${item.focus}`,
+              item.style ? `style: ${item.style}` : null,
+              item.props ? `props: ${JSON.stringify(item.props)}` : null,
+              item.contraindications ? `contraindications: ${JSON.stringify(item.contraindications)}` : null,
+            ]
+          : [
+              `focus: ${item.focus}`,
+              item.style ? `style: ${item.style}` : null,
+              item.duration ? `duration: ${item.duration}` : null,
+              item.scriptureReference ? `scriptureReference: ${item.scriptureReference}` : null,
+              item.targetAudience ? `targetAudience: ${item.targetAudience}` : null,
+            ]
+        ).filter(Boolean),
         "status: draft",
         "---",
         "",
@@ -138,9 +181,9 @@ export async function generateTestSequence(
       ].filter(Boolean).join("\n");
 
       // Save the result with unique ID
-      const outputPath = join(outputDir, `${uniqueId}-${sequence.name}-${config.template}`);
+      const outputPath = join(outputDir, `${uniqueId}-${item.name}-${config.template}`);
       await Deno.writeTextFile(outputPath, metadata);
-      console.log(`✅ Sequence saved to: ${outputPath}`);
+      console.log(`✅ ${type} saved to: ${outputPath}`);
 
       // Display usage statistics
       const stats = usageTracker.getUsageStats();
@@ -155,7 +198,7 @@ export async function generateTestSequence(
         console.log(`Tokens used by ${config.provider}: ${stats.usageByProvider[config.provider]}`);
       }
 
-      console.log(`\nSequence ID: ${uniqueId}`);
+      console.log(`\n${type} ID: ${uniqueId}`);
     } catch (error) {
       if (error instanceof Deno.errors.NotFound) {
         console.error(`Template '${config.template}' not found`);
@@ -167,7 +210,7 @@ export async function generateTestSequence(
         }
         continue;
       }
-      console.error(`❌ Error generating sequence ${sequence.name}:`, error);
+      console.error(`❌ Error generating ${type} ${item.name}:`, error);
     }
   }
 }
@@ -192,7 +235,7 @@ if (import.meta.main) {
   } catch (error) {
     console.error("Failed to run test generation:", error);
     console.error("\nUsage:");
-    console.error("  deno run --allow-read --allow-write test.ts [options]");
+    console.error("  deno run --allow-read --allow-write generate.ts [options]");
     console.error("\nOptions:");
     console.error("  --config=<string>    Path to test configuration file (default: data/config/test-sequence.json)");
     console.error("  --sequence=<string>  Name of specific sequence to generate (optional)");
