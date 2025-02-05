@@ -1,37 +1,45 @@
 import { join, dirname, fromFileUrl } from "https://deno.land/std@0.219.0/path/mod.ts";
-import { generateYogaSequence } from "../generators/yoga.ts";
 import { parse } from "https://deno.land/std@0.219.0/flags/mod.ts";
 import { ensureDir } from "https://deno.land/std@0.219.0/fs/mod.ts";
-import type { YogaConfig } from "../generators/types.ts";
+import { generate, type ContentConfig } from "../generators/template-generator.ts";
 import type { ProviderType } from "../llm/types.ts";
 import { usageTracker } from "../llm/tracker.ts";
 
-interface SequenceConfig {
+// Content type discriminator
+type ContentType = 'yoga' | 'dharma';
+
+// Domain-specific context types with discriminator
+interface BaseContext extends Record<string, unknown> {
+  type: ContentType;
   name: string;
+  style?: string;
+}
+
+interface YogaContext extends BaseContext {
+  type: 'yoga';
   level: string;
   duration: string;
   focus: string;
-  style?: string;
   props?: string[];
   contraindications?: string[];
   concept: string;
 }
 
-interface DharmaTalkConfig {
-  name: string;
+interface DharmaTalkContext extends BaseContext {
+  type: 'dharma';
   focus: string;
-  style?: string;
   duration?: string;
-  scriptureReference?: string;
   targetAudience?: string;
   concept: string;
 }
 
+type GenerationContext = YogaContext | DharmaTalkContext;
+
 interface TestConfig {
   provider: string;
   template: string;
-  sequences?: SequenceConfig[];
-  talks?: DharmaTalkConfig[];
+  sequences?: YogaContext[];
+  talks?: DharmaTalkContext[];
 }
 
 interface ProviderConfig {
@@ -40,6 +48,75 @@ interface ProviderConfig {
 }
 
 type ProviderConfigs = Record<string, ProviderConfig>;
+
+// Content type-specific handlers
+const contentHandlers: Record<ContentType, {
+  validateContext: (context: GenerationContext) => void;
+  formatOutput: (content: string, context: GenerationContext) => string;
+}> = {
+  yoga: {
+    validateContext: (context) => {
+      if (context.type !== 'yoga') throw new Error('Invalid context type');
+      if (!context.level) throw new Error('Level is required for yoga sequences');
+      if (!context.duration) throw new Error('Duration is required for yoga sequences');
+      if (!context.focus) throw new Error('Focus is required for yoga sequences');
+    },
+    formatOutput: (content, context) => {
+      const yoga = context as YogaContext;
+      return [
+        "---",
+        `id: ${generateShortId()}`,
+        `date: ${new Date().toISOString()}`,
+        `type: yoga`,
+        `name: ${yoga.name}`,
+        `level: ${yoga.level}`,
+        `duration: ${yoga.duration}`,
+        `focus: ${yoga.focus}`,
+        yoga.style ? `style: ${yoga.style}` : null,
+        yoga.props ? `props: ${JSON.stringify(yoga.props)}` : null,
+        yoga.contraindications ? `contraindications: ${JSON.stringify(yoga.contraindications)}` : null,
+        "status: draft",
+        "---",
+        "",
+        `# ${yoga.name} - ${yoga.level} Level Yoga Sequence`,
+        `Duration: ${yoga.duration}`,
+        `Focus: ${yoga.focus}`,
+        yoga.props ? `Props: ${yoga.props.join(', ')}` : '',
+        '',
+        content
+      ].filter(Boolean).join('\n');
+    }
+  },
+  dharma: {
+    validateContext: (context) => {
+      if (context.type !== 'dharma') throw new Error('Invalid context type');
+      if (!context.concept) throw new Error('Concept is required for dharma talks');
+      if (!context.focus) throw new Error('Focus is required for dharma talks');
+    },
+    formatOutput: (content, context) => {
+      const dharma = context as DharmaTalkContext;
+      return [
+        "---",
+        `id: ${generateShortId()}`,
+        `date: ${new Date().toISOString()}`,
+        `type: dharma`,
+        `name: ${dharma.name}`,
+        `focus: ${dharma.focus}`,
+        dharma.style ? `style: ${dharma.style}` : null,
+        dharma.duration ? `duration: ${dharma.duration}` : null,
+        dharma.targetAudience ? `targetAudience: ${dharma.targetAudience}` : null,
+        "status: draft",
+        "---",
+        "",
+        `# ${dharma.name} - Dharma Talk`,
+        `Focus: ${dharma.focus}`,
+        `Concept: ${dharma.concept}`,
+        '',
+        content
+      ].filter(Boolean).join('\n');
+    }
+  }
+};
 
 // Function to load provider configurations
 export async function loadProviderConfigs(): Promise<ProviderConfigs> {
@@ -73,26 +150,52 @@ function generateShortId(): string {
   ).join('');
 }
 
+async function generateContent(
+  item: GenerationContext,
+  config: TestConfig,
+  providerConfig: ProviderConfig
+): Promise<string> {
+  const handler = contentHandlers[item.type];
+  
+  // Validate context based on content type
+  handler.validateContext(item);
+
+  // Use the template path directly from config
+  const templatePath = join(
+    dirname(fromFileUrl(import.meta.url)),
+    "../../data/templates",
+    config.template  // Use the template name as provided in config
+  );
+
+  const generatorConfig: ContentConfig<typeof item> = {
+    provider: config.provider as ProviderType,
+    template: { path: templatePath },
+    context: item,
+    temperature: 0.7,
+    ...providerConfig,
+  };
+
+  const rawContent = await generate(generatorConfig);
+  return handler.formatOutput(rawContent, item);
+}
+
 export async function generateTestSequence(
   config: TestConfig,
   providerConfigs: ProviderConfigs,
   itemName?: string
 ): Promise<void> {
-  // Handle both sequences and talks
   const items = config.sequences 
-    ? config.sequences 
+    ? config.sequences.map(s => ({ ...s, type: 'yoga' as const }))
     : config.talks 
-      ? config.talks 
+      ? config.talks.map(t => ({ ...t, type: 'dharma' as const }))
       : [];
       
-  const type = config.sequences ? 'sequence' : 'talk';
-  
   const selectedItems = itemName
     ? items.filter(s => s.name === itemName)
     : items;
 
   if (itemName && selectedItems.length === 0) {
-    console.error(`No ${type} found with name: ${itemName}`);
+    console.error(`No content found with name: ${itemName}`);
     return;
   }
 
@@ -101,89 +204,24 @@ export async function generateTestSequence(
     throw new Error(`Unsupported provider: ${config.provider}`);
   }
 
+  const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
+  await ensureDir(outputDir);
+
   for (const item of selectedItems) {
-    console.log(`\nGenerating ${type}: ${item.name}`);
+    console.log(`\nGenerating ${item.type} content: ${item.name}`);
     console.log("----------------------------------------");
 
     try {
-      const templatePath = join(dirname(fromFileUrl(import.meta.url)), 
-                         `../../data/templates/${config.template}`);
-      const template = await Deno.readTextFile(templatePath);
-
-      const baseConfig = {
-        provider: config.provider as ProviderType,
-        temperature: 0.7,
-        ...providerConfig,
-        template: {
-          path: templatePath,
-          context: {
-            concept: item.concept
-          }
-        },
-        focus: item.focus,
-        style: item.style,
-      };
-
-      const result = await generateYogaSequence(
-        'level' in item 
-          ? {
-              ...baseConfig,
-              level: item.level,
-              duration: item.duration,
-              props: item.props,
-              contraindications: item.contraindications,
-            } as YogaConfig
-          : {
-              ...baseConfig,
-              concept: item.concept,
-              duration: item.duration,
-              scriptureReference: item.scriptureReference,
-              targetAudience: item.targetAudience,
-            } as DharmaTalkConfig
-      );
-
-      // Generate unique ID
+      const content = await generateContent(item, config, providerConfig);
       const uniqueId = generateShortId();
-
-      // Create output directory
-      const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
-      await ensureDir(outputDir);
-
-      // Prepare metadata header
-      const metadata = [
-        "---",
-        `id: ${uniqueId}`,
-        `date: ${new Date().toISOString()}`,
-        `provider: ${config.provider}`,
-        `model: ${providerConfig.model}`,
-        `template: ${config.template}`,
-        ...('level' in item 
-          ? [
-              `level: ${item.level}`,
-              `duration: ${item.duration}`,
-              `focus: ${item.focus}`,
-              item.style ? `style: ${item.style}` : null,
-              item.props ? `props: ${JSON.stringify(item.props)}` : null,
-              item.contraindications ? `contraindications: ${JSON.stringify(item.contraindications)}` : null,
-            ]
-          : [
-              `focus: ${item.focus}`,
-              item.style ? `style: ${item.style}` : null,
-              item.duration ? `duration: ${item.duration}` : null,
-              item.scriptureReference ? `scriptureReference: ${item.scriptureReference}` : null,
-              item.targetAudience ? `targetAudience: ${item.targetAudience}` : null,
-            ]
-        ).filter(Boolean),
-        "status: draft",
-        "---",
-        "",
-        result
-      ].filter(Boolean).join("\n");
-
-      // Save the result with unique ID
-      const outputPath = join(outputDir, `${uniqueId}-${item.name}-${config.template}`);
-      await Deno.writeTextFile(outputPath, metadata);
-      console.log(`✅ ${type} saved to: ${outputPath}`);
+      
+      const outputPath = join(
+        outputDir,
+        `${uniqueId}-${item.name.toLowerCase().replace(/\s+/g, '-')}-${item.type}-prompt.md`
+      );
+      
+      await Deno.writeTextFile(outputPath, content);
+      console.log(`✅ Content saved to: ${outputPath}`);
 
       // Display usage statistics
       const stats = usageTracker.getUsageStats();
@@ -198,19 +236,9 @@ export async function generateTestSequence(
         console.log(`Tokens used by ${config.provider}: ${stats.usageByProvider[config.provider]}`);
       }
 
-      console.log(`\n${type} ID: ${uniqueId}`);
+      console.log(`\nContent ID: ${uniqueId}`);
     } catch (error) {
-      if (error instanceof Deno.errors.NotFound) {
-        console.error(`Template '${config.template}' not found`);
-        console.error("\nAvailable templates:");
-        for await (const dirEntry of Deno.readDir(join(dirname(fromFileUrl(import.meta.url)), "../../data/templates"))) {
-          if (dirEntry.isFile) {
-            console.error(`  - ${dirEntry.name}`);
-          }
-        }
-        continue;
-      }
-      console.error(`❌ Error generating ${type} ${item.name}:`, error);
+      console.error(`❌ Error generating ${item.type} content ${item.name}:`, error);
     }
   }
 }

@@ -8,7 +8,6 @@ Use these parameters to create the talk:
 - Style: {style}
 - Duration: {duration}
 - Target Audience: {targetAudience}
-- Scripture Reference: {scriptureReference}
 
 The talk should follow this concept:
 {concept}
@@ -25,7 +24,7 @@ For each section, include:
 - Practice instructions where appropriate
 - Questions for reflection
 
-2. OUTPUT FORMAT:
+1. OUTPUT FORMAT:
 Your response must exactly match this format without any additional markdown formatting:
 
 # Dharma Talk - {focus}
