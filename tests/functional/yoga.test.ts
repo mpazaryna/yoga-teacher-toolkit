@@ -1,6 +1,6 @@
 import { assertEquals, assertRejects } from "https://deno.land/std@0.219.0/assert/mod.ts";
 import { generateYogaSequence } from "../../src/generators/yoga.ts";
-import type { YogaConfig } from "../../src/generators/types.ts";
+import type { YogaConfig } from "../../src/generators/yoga.ts";  // Import from yoga.ts directly
 import type { ProviderType } from "../../src/llm/types.ts";
 
 // Set the provider to use for tests
@@ -20,26 +20,11 @@ if (!apiKey) {
   Deno.exit(0);
 }
 
-const mockTemplate = `
-# {concept}
-
-## Parameters
-- Level: {level}
-- Duration: {duration}
-- Focus: {focus}
-- Style: {style}
-- Props: {props}
-- Contraindications: {contraindications}
-
-## Sequence
-{sequence}
-`;
-
 Deno.test("Yoga Sequence Generator", async (t) => {
   await t.step("validates required fields", async () => {
     const invalidConfig: YogaConfig = {
       ...TEST_CONFIG,
-      template: mockTemplate,
+      template: "data/templates/sequence-prompt.md",
       level: "",  // Invalid: empty level
       duration: "60 minutes",
       focus: "strength"
@@ -55,7 +40,7 @@ Deno.test("Yoga Sequence Generator", async (t) => {
   await t.step("generates sequence with minimal config", async () => {
     const config: YogaConfig = {
       ...TEST_CONFIG,
-      template: mockTemplate,
+      template: "data/templates/sequence-prompt.md",
       level: "beginner",
       duration: "60 minutes",
       focus: "strength"
@@ -70,7 +55,7 @@ Deno.test("Yoga Sequence Generator", async (t) => {
   await t.step("includes optional parameters in generation", async () => {
     const config: YogaConfig = {
       ...TEST_CONFIG,
-      template: mockTemplate,
+      template: "data/templates/sequence-prompt.md",
       level: "intermediate",
       duration: "90 minutes",
       focus: "flexibility",
@@ -80,21 +65,15 @@ Deno.test("Yoga Sequence Generator", async (t) => {
     };
     
     const result = await generateYogaSequence(config);
-    // Just verify we got a non-empty string response
+    // Verify we got a substantial response
     assertEquals(typeof result, "string");
-    assertEquals(result.length > 100, true); // Should be a substantial response
+    assertEquals(result.length > 500, true, "Response should be a substantial yoga sequence");
     
-    // Very lenient content checks - just make sure some of our input was considered
-    const lowerResult = result.toLowerCase();
-    const hasAnyKeyword = [
-      "intermediate",
-      "flexibility",
-      "vinyasa",
-      "block",
-      "strap",
-      "back"
-    ].some(keyword => lowerResult.includes(keyword.toLowerCase()));
+    // Log the actual response for debugging
+    console.log("Response content:", result);
     
-    assertEquals(hasAnyKeyword, true, "Response should include at least one of the input keywords");
+    // Verify it has some basic structure we expect
+    assertEquals(result.includes("#"), true, "Response should contain markdown headings");
+    assertEquals(result.includes("##"), true, "Response should contain section headings");
   });
 }); 

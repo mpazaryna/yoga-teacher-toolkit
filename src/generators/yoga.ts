@@ -50,6 +50,15 @@
 import { createProvider } from "../llm/factory.ts";
 import { loadTemplate, injectContext } from "./template.ts";
 import { withRetry } from "./retry.ts";
+import type { ProviderType } from "../llm/types.ts";
+
+/**
+ * Template configuration type
+ */
+type TemplateConfig = {
+  path: string;
+  context?: Record<string, unknown>;
+} | string;  // Allow direct string paths for backward compatibility
 
 /**
  * Base configuration interface for all content generation
@@ -57,7 +66,7 @@ import { withRetry } from "./retry.ts";
  * 
  * @property focus - The main topic or area of focus
  * @property style - Optional style or approach (e.g., "vinyasa", "secular")
- * @property template - Path to the template file
+ * @property template - Template configuration
  * @property provider - LLM provider to use
  * @property temperature - Optional temperature for generation (0-1)
  * @property maxTokens - Optional maximum tokens for generation
@@ -66,8 +75,8 @@ import { withRetry } from "./retry.ts";
 type BaseConfig = {
   focus: string;
   style?: string;
-  template: string;
-  provider: string;
+  template: TemplateConfig;
+  provider: ProviderType;
   temperature?: number;
   maxTokens?: number;
   model?: string;
@@ -194,7 +203,8 @@ export const generate = async (config: YogaConfig | DharmaTalkConfig): Promise<s
   validateConfig(config);
   
   // Load and process template
-  const template = await loadTemplate(config.template);
+  const templatePath = typeof config.template === 'string' ? config.template : config.template.path;
+  const template = await loadTemplate(templatePath);
   const context = buildContext(config);
   const prompt = injectContext(template, context);
   

@@ -7,34 +7,19 @@ import type { TemplateConfig, ContextData } from "./types.ts";
 
 /**
  * Loads a template from various sources based on the template configuration
- * @param template Template configuration
+ * @param template Template path or configuration
  * @returns Promise resolving to the template content
  */
-export const loadTemplate = async (template: TemplateConfig): Promise<string> => {
-  if (typeof template === 'string') {
-    console.log("📝 Using provided template string");
-    return template;
+export const loadTemplate = async (template: string): Promise<string> => {
+  console.log(`📂 Loading template from: ${template}`);
+  try {
+    const content = await Deno.readTextFile(template);
+    console.log("✅ Template loaded successfully");
+    return content;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to load template: ${message}`);
   }
-  
-  if ('path' in template) {
-    console.log(`📂 Loading template from: ${template.path}`);
-    try {
-      const content = await Deno.readTextFile(template.path);
-      console.log("✅ Template loaded successfully");
-      return content;
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      throw new Error(`Failed to load template: ${message}`);
-    }
-  }
-  
-  if ('name' in template) {
-    console.log(`📂 Loading template: ${template.name}`);
-    // TODO: Implement template loading by name
-    throw new Error('Template loading by name not yet implemented');
-  }
-  
-  throw new Error('Invalid template configuration');
 };
 
 /**
