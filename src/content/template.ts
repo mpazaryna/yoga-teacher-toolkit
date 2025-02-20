@@ -29,11 +29,29 @@ export const loadTemplate = async (template: string): Promise<string> => {
  * @returns Template with injected context
  */
 export const injectContext = (template: string, context: ContextData): string => {
+  console.log('\n🔍 Debug - Context keys and values:');
+  Object.entries(context).forEach(([key, value]) => {
+    console.log(`Key: ${key}`);
+    console.log(`Value: ${value}`);
+    console.log('---');
+  });
+
   return Object.entries(context).reduce(
-    (result, [key, value]) => result.replace(
-      new RegExp(`{${key}}`, 'g'),
-      Array.isArray(value) ? value.join(', ') : String(value ?? '')
-    ),
+    (result, [key, value]) => {
+      const lowerPlaceholder = `{${key.toLowerCase()}}`;
+      const upperPlaceholder = `{${key.toUpperCase()}}`;
+      
+      console.log(`Looking for placeholders: ${lowerPlaceholder} or ${upperPlaceholder}`);
+      
+      const lowerResult = result.replace(
+        new RegExp(lowerPlaceholder, 'g'),
+        Array.isArray(value) ? value.join(', ') : String(value ?? '')
+      );
+      return lowerResult.replace(
+        new RegExp(upperPlaceholder, 'g'),
+        Array.isArray(value) ? value.join(', ') : String(value ?? '')
+      );
+    },
     template
   );
 }; 

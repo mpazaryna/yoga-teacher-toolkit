@@ -48,10 +48,9 @@
  * const content = await generate(config);
  */
 
-import { createProvider } from "../llm/factory.ts";
 import { loadTemplate, injectContext } from "./template.ts";
 import { withRetry } from "./retry.ts";
-import type { ProviderType } from "../llm/types.ts";
+import type { LLMClient } from "@lexikon/module-llm";
 
 /**
  * Template configuration type
@@ -59,82 +58,57 @@ import type { ProviderType } from "../llm/types.ts";
 type TemplateConfig = {
   path: string;
   context?: Record<string, unknown>;
-} | string;  // Allow direct string paths for backward compatibility
+} | string;
 
 /**
  * Base configuration interface for all content generation
- * Contains common properties needed across different content types
- * 
- * @property provider - LLM provider to use
- * @property template - Template configuration
- * @property context - Type-specific context for content generation
- * @property temperature - Optional temperature for generation (0-1)
- * @property maxTokens - Optional maximum tokens for generation
- * @property model - Optional specific model to use
  */
 export type ContentConfig<T extends Record<string, unknown>> = {
-  provider: ProviderType;
+  llm: LLMClient;  // Accept LLM client directly
   template: TemplateConfig;
   context: T;
-  temperature?: number;
-  maxTokens?: number;
-  model?: string;
 }
 
-/**
- * Validates the configuration for content generation
- * Ensures all required fields are present
- * 
- * @param config - Content generation configuration
- * @throws Error if configuration is invalid
- */
 const validateConfig = <T extends Record<string, unknown>>(config: ContentConfig<T>): void => {
   if (!config.template) throw new Error('Template is required');
-  if (!config.provider) throw new Error('Provider is required');
+  if (!config.llm) throw new Error('LLM client is required');
   if (!config.context) throw new Error('Context is required');
 };
 
-/**
- * Core generation function that handles all content types
- * Implements the complete generation workflow:
- * 1. Configuration validation
- * 2. Template loading and processing
- * 3. LLM provider setup
- * 4. Content generation with retry logic
- * 
- * @param config - Content generation configuration with type-specific context
- * @returns Promise resolving to the generated content
- * @throws Error if generation fails
- */
 export const generate = async <T extends Record<string, unknown>>(config: ContentConfig<T>): Promise<string> => {
   console.log('🚀 Starting content generation...');
   
-  // Validate configuration
   validateConfig(config);
   
-  // Load and process template
   const templatePath = typeof config.template === 'string' ? config.template : config.template.path;
   const template = await loadTemplate(templatePath);
+  
+  console.log('\n📋 Context being injected:');
+  console.log(JSON.stringify(config.context, null, 2));
+  
+  // Use the original injectContext function
   const prompt = injectContext(template, config.context);
   
-  // Create LLM provider
-  const llm = createProvider(config.provider, {
-    temperature: config.temperature,
-    maxTokens: config.maxTokens,
-    model: config.model
-  });
+  console.log('\n📝 Final prompt after replacements:');
+  console.log('----------------------------------------');
+  console.log(prompt);
+  console.log('----------------------------------------\n');
   
-  // Generate with retry logic
   return withRetry(
     async () => {
-      console.log(`🤖 Generating with provider: ${config.provider}`);
-      const response = await llm.generateContent(prompt);
+      // Format messages as expected by Claude
+      const messages: Message[] = [{
+        role: "user",
+        content: prompt
+      }];
       
-      if (!response?.content) {
+      const response = await config.llm.complete(messages);
+      
+      if (!response?.message?.content) {
         throw new Error("No content received from LLM provider");
       }
       
-      return response.content;
+      return response.message.content;
     },
     {
       onError: (error, attempt) => {

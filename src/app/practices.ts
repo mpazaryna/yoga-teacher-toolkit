@@ -1,9 +1,8 @@
-import { join, dirname, fromFileUrl } from "https://deno.land/std@0.219.0/path/mod.ts";
-import { parse } from "https://deno.land/std@0.219.0/flags/mod.ts";
-import { ensureDir } from "https://deno.land/std@0.219.0/fs/mod.ts";
+import { join, dirname, fromFileUrl } from "@std/path";
+import { parse } from "@std/flags";
+import { ensureDir } from "@std/fs";
 import { generate, type ContentConfig } from "../content/generator-template.ts";
-import type { ProviderType } from "../llm/types.ts";
-import { usageTracker } from "../llm/tracker.ts";
+import { createOpenAIClient as llmClient } from "@lexikon/module-llm";
 
 // Content type discriminator
 type ContentType = 'yoga' | 'dharma';
@@ -41,13 +40,6 @@ interface TestConfig {
   sequences?: YogaContext[];
   talks?: DharmaTalkContext[];
 }
-
-interface ProviderConfig {
-  model: string;
-  maxTokens: number;
-}
-
-type ProviderConfigs = Record<string, ProviderConfig>;
 
 // Content type-specific handlers
 const contentHandlers: Record<ContentType, {
@@ -118,19 +110,6 @@ const contentHandlers: Record<ContentType, {
   }
 };
 
-// Function to load provider configurations
-export async function loadProviderConfigs(): Promise<ProviderConfigs> {
-  try {
-    const configPath = join(dirname(fromFileUrl(import.meta.url)), 
-                          "../../data/config/providers.json");
-    const content = await Deno.readTextFile(configPath);
-    return JSON.parse(content);
-  } catch (error) {
-    console.error("Error loading provider configurations:", error);
-    throw new Error("Failed to load provider configurations. Please ensure data/config/providers.json exists and is valid.");
-  }
-}
-
 export async function loadConfig(configPath: string): Promise<TestConfig> {
   try {
     const content = await Deno.readTextFile(configPath);
@@ -153,26 +132,28 @@ function generateShortId(): string {
 async function generateContent(
   item: GenerationContext,
   config: TestConfig,
-  providerConfig: ProviderConfig
 ): Promise<string> {
   const handler = contentHandlers[item.type];
   
-  // Validate context based on content type
   handler.validateContext(item);
 
-  // Use the template path directly from config
   const templatePath = join(
     dirname(fromFileUrl(import.meta.url)),
     "../../data/templates",
-    config.template  // Use the template name as provided in config
+    config.template
   );
 
+  const llm = llmClient({
+    apiKey: Deno.env.get('OPENROUTER_API_KEY')?.trim() || '',
+    model: 'gpt-3.5-turbo',
+    temperature: 0.7,
+    maxTokens: 1000,
+  });
+
   const generatorConfig: ContentConfig<typeof item> = {
-    provider: config.provider as ProviderType,
+    llm,
     template: { path: templatePath },
     context: item,
-    temperature: 0.7,
-    ...providerConfig,
   };
 
   const rawContent = await generate(generatorConfig);
@@ -181,7 +162,6 @@ async function generateContent(
 
 export async function generateTestSequence(
   config: TestConfig,
-  providerConfigs: ProviderConfigs,
   itemName?: string
 ): Promise<void> {
   const items = config.sequences 
@@ -199,11 +179,6 @@ export async function generateTestSequence(
     return;
   }
 
-  const providerConfig = providerConfigs[config.provider];
-  if (!providerConfig) {
-    throw new Error(`Unsupported provider: ${config.provider}`);
-  }
-
   const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
   await ensureDir(outputDir);
 
@@ -212,7 +187,7 @@ export async function generateTestSequence(
     console.log("----------------------------------------");
 
     try {
-      const content = await generateContent(item, config, providerConfig);
+      const content = await generateContent(item, config);
       const uniqueId = generateShortId();
       
       const outputPath = join(
@@ -222,20 +197,6 @@ export async function generateTestSequence(
       
       await Deno.writeTextFile(outputPath, content);
       console.log(`✅ Content saved to: ${outputPath}`);
-
-      // Display usage statistics
-      const stats = usageTracker.getUsageStats();
-      console.log("\nUsage Statistics:");
-      console.log(`Total API calls: ${stats.totalCalls}`);
-      console.log(`Success rate: ${stats.successRate.toFixed(1)}%`);
-      console.log(`Average latency: ${stats.averageLatency.toFixed(0)}ms`);
-      console.log(`Total tokens used: ${stats.totalTokens}`);
-      console.log(`Estimated cost: $${stats.totalCost.toFixed(4)}`);
-      
-      if (stats.usageByProvider[config.provider]) {
-        console.log(`Tokens used by ${config.provider}: ${stats.usageByProvider[config.provider]}`);
-      }
-
       console.log(`\nContent ID: ${uniqueId}`);
     } catch (error) {
       console.error(`❌ Error generating ${item.type} content ${item.name}:`, error);
@@ -255,11 +216,8 @@ if (import.meta.main) {
                          `../../${flags.config}`);
   
   try {
-    const [config, providerConfigs] = await Promise.all([
-      loadConfig(configPath),
-      loadProviderConfigs()
-    ]);
-    await generateTestSequence(config, providerConfigs, flags.sequence);
+    const config = await loadConfig(configPath);
+    await generateTestSequence(config, flags.sequence);
   } catch (error) {
     console.error("Failed to run test generation:", error);
     console.error("\nUsage:");
