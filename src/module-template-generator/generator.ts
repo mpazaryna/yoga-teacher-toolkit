@@ -1,6 +1,9 @@
-import { type GeneratorConfig, type GeneratorContext, type GenerationResult } from './types.ts';
+import { type GeneratorConfig, type GeneratorContext, type GenerationResult, type RetryOptions } from './types.ts';
 import { loadTemplate, applyContext } from './template.ts';
 import { withRetry } from './utils.ts';
+
+// Export the types
+export type { GeneratorConfig, GeneratorContext, GenerationResult } from './types.ts';
 
 /**
  * Creates a template generator for LLM content generation
@@ -8,6 +11,13 @@ import { withRetry } from './utils.ts';
 export function createGenerator(config: GeneratorConfig) {
   let template: string | null = null;
   let context: GeneratorContext | null = null;
+
+  // Default retry options
+  const retryOptions: RetryOptions = {
+    maxAttempts: 3,
+    delayMs: 1000,
+    ...config.retryOptions
+  };
 
   const generator = {
     async loadTemplate(templatePath: string) {
@@ -44,7 +54,7 @@ export function createGenerator(config: GeneratorConfig) {
           }
           return response.message.content;
         },
-        config.retryOptions
+        retryOptions
       );
 
       return {

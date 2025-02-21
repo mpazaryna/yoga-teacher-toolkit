@@ -9,9 +9,9 @@ export type GeneratorConfig = {
 
 export type GeneratorContext = Record<string, unknown>;
 
-export type RetryOptions = {
-  maxAttempts?: number;
-  delayMs?: number;
+export interface RetryOptions {
+  maxAttempts: number;
+  delayMs: number;
   onError?: (error: Error, attempt: number) => void;
   onRetry?: (attempt: number, delay: number) => void;
 }

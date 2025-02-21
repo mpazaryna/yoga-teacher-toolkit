@@ -4,8 +4,11 @@
 export const loadTemplate = async (templatePath: string): Promise<string> => {
   try {
     return await Deno.readTextFile(templatePath);
-  } catch (error) {
-    throw new Error(`Failed to load template: ${error.message}`);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to load template: ${error.message}`);
+    }
+    throw new Error('Failed to load template: Unknown error');
   }
 };
 

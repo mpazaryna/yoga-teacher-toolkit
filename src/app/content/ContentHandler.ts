@@ -12,13 +12,19 @@ export interface GenerationContext {
 export type ContentType = 'yoga' | 'dharma';
 
 export interface YogaContext extends GenerationContext {
+  name: string;
   type: 'yoga';
-  level: string;
   duration: string;
+  level: string;
+  style: string;
   focus: string;
-  props?: string[];
-  contraindications?: string[];
   concept: string;
+  props: string[];
+  asanas?: string[];
+  transitions: string[];
+  breathwork: string[];
+  peak: string[];
+  modifications: string[];
 }
 
 export interface DharmaTalkContext extends GenerationContext {

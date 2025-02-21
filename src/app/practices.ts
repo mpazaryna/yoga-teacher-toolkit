@@ -1,7 +1,8 @@
 import { join, dirname, fromFileUrl } from "https://deno.land/std/path/mod.ts";
 import { parse } from "https://deno.land/std/flags/mod.ts";
 import { ensureDir } from "https://deno.land/std/fs/mod.ts";
-import { createGenerator, type GeneratorConfig } from "../module-template-generator/generator.ts";
+import { createGenerator } from "../module-template-generator/generator.ts";
+import type { GeneratorContext } from "../module-template-generator/types.ts";
 import { getLLMClient } from './config/llm.ts';
 import { ContentHandler, GenerationContext, YogaContext, DharmaTalkContext } from './content/ContentHandler.ts';
 import { YogaContentHandler } from './content/YogaContentHandler.ts';
@@ -43,7 +44,7 @@ function generateShortId(): string {
 }
 
 async function generateContent(
-  item: GenerationContext,
+  item: GenerationContext & GeneratorContext,
   config: TestConfig,
 ): Promise<string> {
   const handler = contentHandlers[item.type];
@@ -57,16 +58,15 @@ async function generateContent(
 
   const llm = getLLMClient();
 
-  // Create generator with LLM client
   const generator = createGenerator({
     llm,
     retryOptions: {
       maxAttempts: 3,
       delayMs: 1000,
-      onError: (error, attempt) => {
+      onError: (error: Error, attempt: number) => {
         console.error(`❌ Generation attempt ${attempt} failed:`, error.message);
       },
-      onRetry: (attempt, delay) => {
+      onRetry: (attempt: number, delay: number) => {
         console.log(`🔄 Retrying in ${delay/1000} seconds... (attempt ${attempt})`);
       }
     }
@@ -126,6 +126,9 @@ export async function generateTestSequence(
     }
   }
 }
+
+// Export for testing
+export { generateShortId };
 
 if (import.meta.main) {
   const flags = parse(Deno.args, {
