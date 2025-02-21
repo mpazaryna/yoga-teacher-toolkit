@@ -17,8 +17,6 @@
     "approve": "deno run --allow-read --allow-write src/app/approve.ts",
     "list:drafts": "deno run --allow-read src/app/list.ts --status=draft",
     "list:approved": "deno run --allow-read src/app/list.ts --status=approved",
-    "test:sequence": "deno run --allow-read --allow-write --allow-env --allow-net src/app/practices.ts",
-    "test:sequence:single": "deno run --allow-read --allow-write --allow-env --allow-net src/app/practices.ts --sequence",
     "test:setlist": "deno run --allow-read --allow-write --allow-env --allow-net src/app/practices.ts --config=data/config/setlist-config.json",
     "test:dharma": "deno run --allow-read --allow-write --allow-env --allow-net src/app/practices.ts --config=data/config/dharma-config.json"
   }
