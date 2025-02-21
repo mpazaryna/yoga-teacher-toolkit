@@ -1,38 +1,14 @@
-import { join, dirname, fromFileUrl } from "@std/path";
-import { parse } from "@std/flags";
-import { ensureDir } from "@std/fs";
+import { join, dirname, fromFileUrl } from "https://deno.land/std/path/mod.ts";
+import { parse } from "https://deno.land/std/flags/mod.ts";
+import { ensureDir } from "https://deno.land/std/fs/mod.ts";
 import { createGenerator, type GeneratorConfig } from "../module-template-generator/generator.ts";
-import { createOpenAIClient as llmClient } from "@forge/llm";
+import { getLLMClient } from './config/llm.ts';
+import { ContentHandler, GenerationContext, YogaContext, DharmaTalkContext } from './content/ContentHandler.ts';
+import { YogaContentHandler } from './content/YogaContentHandler.ts';
+import { DharmaContentHandler } from './content/DharmaContentHandler.ts';
 
 // Content type discriminator
 type ContentType = 'yoga' | 'dharma';
-
-// Domain-specific context types with discriminator
-interface BaseContext extends Record<string, unknown> {
-  type: ContentType;
-  name: string;
-  style?: string;
-}
-
-interface YogaContext extends BaseContext {
-  type: 'yoga';
-  level: string;
-  duration: string;
-  focus: string;
-  props?: string[];
-  contraindications?: string[];
-  concept: string;
-}
-
-interface DharmaTalkContext extends BaseContext {
-  type: 'dharma';
-  focus: string;
-  duration?: string;
-  targetAudience?: string;
-  concept: string;
-}
-
-type GenerationContext = YogaContext | DharmaTalkContext;
 
 interface TestConfig {
   provider: string;
@@ -41,73 +17,10 @@ interface TestConfig {
   talks?: DharmaTalkContext[];
 }
 
-// Content type-specific handlers
-const contentHandlers: Record<ContentType, {
-  validateContext: (context: GenerationContext) => void;
-  formatOutput: (content: string, context: GenerationContext) => string;
-}> = {
-  yoga: {
-    validateContext: (context) => {
-      if (context.type !== 'yoga') throw new Error('Invalid context type');
-      if (!context.level) throw new Error('Level is required for yoga sequences');
-      if (!context.duration) throw new Error('Duration is required for yoga sequences');
-      if (!context.focus) throw new Error('Focus is required for yoga sequences');
-    },
-    formatOutput: (content, context) => {
-      const yoga = context as YogaContext;
-      return [
-        "---",
-        `id: ${generateShortId()}`,
-        `date: ${new Date().toISOString()}`,
-        `type: yoga`,
-        `name: ${yoga.name}`,
-        `level: ${yoga.level}`,
-        `duration: ${yoga.duration}`,
-        `focus: ${yoga.focus}`,
-        yoga.style ? `style: ${yoga.style}` : null,
-        yoga.props ? `props: ${JSON.stringify(yoga.props)}` : null,
-        yoga.contraindications ? `contraindications: ${JSON.stringify(yoga.contraindications)}` : null,
-        "status: draft",
-        "---",
-        "",
-        `# ${yoga.name} - ${yoga.level} Level Yoga Sequence`,
-        `Duration: ${yoga.duration}`,
-        `Focus: ${yoga.focus}`,
-        yoga.props ? `Props: ${yoga.props.join(', ')}` : '',
-        '',
-        content
-      ].filter(Boolean).join('\n');
-    }
-  },
-  dharma: {
-    validateContext: (context) => {
-      if (context.type !== 'dharma') throw new Error('Invalid context type');
-      if (!context.concept) throw new Error('Concept is required for dharma talks');
-      if (!context.focus) throw new Error('Focus is required for dharma talks');
-    },
-    formatOutput: (content, context) => {
-      const dharma = context as DharmaTalkContext;
-      return [
-        "---",
-        `id: ${generateShortId()}`,
-        `date: ${new Date().toISOString()}`,
-        `type: dharma`,
-        `name: ${dharma.name}`,
-        `focus: ${dharma.focus}`,
-        dharma.style ? `style: ${dharma.style}` : null,
-        dharma.duration ? `duration: ${dharma.duration}` : null,
-        dharma.targetAudience ? `targetAudience: ${dharma.targetAudience}` : null,
-        "status: draft",
-        "---",
-        "",
-        `# ${dharma.name} - Dharma Talk`,
-        `Focus: ${dharma.focus}`,
-        `Concept: ${dharma.concept}`,
-        '',
-        content
-      ].filter(Boolean).join('\n');
-    }
-  }
+// Replace contentHandlers object with a factory
+const contentHandlers: Record<ContentType, ContentHandler> = {
+  yoga: new YogaContentHandler(),
+  dharma: new DharmaContentHandler()
 };
 
 export async function loadConfig(configPath: string): Promise<TestConfig> {
@@ -142,12 +55,7 @@ async function generateContent(
     config.template
   );
 
-  const llm = llmClient({
-    apiKey: Deno.env.get('OPENROUTER_API_KEY')?.trim() || '',
-    model: 'gpt-3.5-turbo',
-    temperature: 0.7,
-    maxTokens: 1000,
-  });
+  const llm = getLLMClient();
 
   // Create generator with LLM client
   const generator = createGenerator({

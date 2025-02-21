@@ -18,6 +18,6 @@
     "list:drafts": "deno run --allow-read src/app/list.ts --status=draft",
     "list:approved": "deno run --allow-read src/app/list.ts --status=approved",
     "test:setlist": "deno run --allow-read --allow-write --allow-env --allow-net src/app/practices.ts --config=data/config/setlist-config.json",
-    "test:dharma": "deno run --allow-read --allow-write --allow-env --allow-net src/app/practices.ts --config=data/config/dharma-config.json"
+    "test:talk": "deno run --allow-read --allow-write --allow-env --allow-net src/app/practices.ts --config=data/config/dharma-config.json"
   }
 }
