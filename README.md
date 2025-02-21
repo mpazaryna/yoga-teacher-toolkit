@@ -4,7 +4,7 @@ A sophisticated TypeScript application designed to assist yoga teachers in creat
 
 ## Overview
 
-The Yoga Sequence Generator combines deep domain knowledge of yoga teaching with modern software architecture to create a powerful tool for yoga teachers. It generates sequences based on specific parameters such as:
+The project combines deep domain knowledge of yoga teaching with modern software architecture to create a powerful tool for yoga teachers. It generates sequences based on specific parameters such as:
 
 - Class duration
 - Difficulty level
@@ -65,7 +65,7 @@ The content generation follows a well-defined algorithm with both invariant and 
 The system supports various configuration options through JSON files:
 
 - `data/config/setlist.json`: Sequence configurations
-- `data/config/dharma-config.json`: Dharma talk settings
+- `data/config/talk.json`: Dharma talk settings
 - `data/templates/`: Template files for content generation
 
 ## Architecture
@@ -77,14 +77,4 @@ The application follows SOLID principles and implements a robust type system:
 - **Liskov Substitution**: Consistent behavior contracts across content handlers
 - **Interface Segregation**: Clear separation of concerns
 - **Dependency Inversion**: Pluggable components and abstractions
-
-## License
-
-[Add your license information here]
-
-## Acknowledgments
-
-- Yoga tradition and philosophy
-- Gang of Four design patterns
-- TypeScript and modern software development practices
 

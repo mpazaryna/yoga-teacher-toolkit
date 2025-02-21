@@ -3,14 +3,6 @@
   "template": "dharma-prompt.md",
   "talks": [
     {
-      "name": "compassion-practice",
-      "focus": "cultivating compassion",
-      "style": "secular",
-      "duration": "30 minutes",
-      "targetAudience": "beginners",
-      "concept": "An exploration of how we can develop genuine compassion for ourselves and others through Buddhist teachings and practical meditation techniques"
-    },
-    {
       "name": "mindful-relationships",
       "focus": "mindfulness in relationships",
       "style": "contemporary",
