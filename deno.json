@@ -11,7 +11,7 @@
     "@templates": "./data/templates",
     "@output": "./data/output",
     "@setlists": "./data/setlists",
-    "@lexikon/module-llm": "../lexikon/module-llm/mod.ts"
+    "@forge/llm": "../forge/llm/mod.ts"
   },
   "tasks": {
     "approve": "deno run --allow-read --allow-write src/app/approve.ts",

@@ -1,8 +1,8 @@
 import { join, dirname, fromFileUrl } from "@std/path";
 import { parse } from "@std/flags";
 import { ensureDir } from "@std/fs";
-import { createGenerator, type GeneratorConfig } from "../module-template-generator/generator.ts";
-import { createOpenAIClient as llmClient } from "@forge/llm";
+import { generate, type ContentConfig } from "../content/generator-template.ts";
+import { createOpenAIClient as llmClient } from "@lexikon/module-llm";
 
 // Content type discriminator
 type ContentType = 'yoga' | 'dharma';
@@ -134,6 +134,7 @@ async function generateContent(
   config: TestConfig,
 ): Promise<string> {
   const handler = contentHandlers[item.type];
+  
   handler.validateContext(item);
 
   const templatePath = join(
@@ -149,30 +150,14 @@ async function generateContent(
     maxTokens: 1000,
   });
 
-  // Create generator with LLM client
-  const generator = createGenerator({
+  const generatorConfig: ContentConfig<typeof item> = {
     llm,
-    retryOptions: {
-      maxAttempts: 3,
-      delayMs: 1000,
-      onError: (error, attempt) => {
-        console.error(`❌ Generation attempt ${attempt} failed:`, error.message);
-      },
-      onRetry: (attempt, delay) => {
-        console.log(`🔄 Retrying in ${delay/1000} seconds... (attempt ${attempt})`);
-      }
-    }
-  });
+    template: { path: templatePath },
+    context: item,
+  };
 
-  // Break down the steps for debugging
-  console.log("Loading template...");
-  const withTemplate = await generator.loadTemplate(templatePath);
-  console.log("Adding context...");
-  const withContext = withTemplate.withContext(item);
-  console.log("Generating content...");
-  const result = await withContext.generate();
-
-  return handler.formatOutput(result.content, item);
+  const rawContent = await generate(generatorConfig);
+  return handler.formatOutput(rawContent, item);
 }
 
 export async function generateTestSequence(
