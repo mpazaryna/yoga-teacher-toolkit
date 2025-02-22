@@ -3,7 +3,7 @@ import { parse } from "@std/flags";
 import { ensureDir } from "@std/fs";
 import { createGenerator } from "@forge/generator";
 import type { GeneratorContext } from "@forge/generator";
-import { getLLMClient } from './config/llm.ts';
+import { getLLMClient } from './llm.ts';
 import { ContentHandler, GenerationContext, YogaContext, DharmaTalkContext } from './content/ContentHandler.ts';
 import { YogaContentHandler } from './content/YogaContentHandler.ts';
 import { DharmaContentHandler } from './content/DharmaContentHandler.ts';
