@@ -1,9 +1,8 @@
 import { join, dirname, fromFileUrl } from "https://deno.land/std/path/mod.ts";
 import { parse } from "https://deno.land/std/flags/mod.ts";
 import { ensureDir } from "https://deno.land/std/fs/mod.ts";
-//import { createGenerator } from "../module-template-generator/generator.ts";
 import { createGenerator } from "@forge/generator";
-import type { GeneratorContext } from "../module-template-generator/types.ts";
+import type { GeneratorContext } from "@forge/generator";
 import { getLLMClient } from './config/llm.ts';
 import { ContentHandler, GenerationContext, YogaContext, DharmaTalkContext } from './content/ContentHandler.ts';
 import { YogaContentHandler } from './content/YogaContentHandler.ts';
