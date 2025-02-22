@@ -11,7 +11,8 @@
     "@templates": "./data/templates",
     "@output": "./data/output",
     "@setlists": "./data/setlists",
-    "@forge/llm": "../forge/llm/mod.ts"
+    "@forge/llm": "../forge/llm/mod.ts",
+    "@forge/generator": "../forge/generator/mod.ts"
   },
   "tasks": {
     "test": "deno test --allow-read --allow-env --allow-write --allow-net",
