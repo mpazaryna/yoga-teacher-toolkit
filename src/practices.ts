@@ -1,17 +1,19 @@
-import { join, dirname, fromFileUrl } from "https://deno.land/std/path/mod.ts";
-import { parse } from "https://deno.land/std/flags/mod.ts";
-import { ensureDir } from "https://deno.land/std/fs/mod.ts";
+import { join, dirname, fromFileUrl } from "@std/path";
+import { parse } from "@std/flags";
+import { ensureDir } from "@std/fs";
 import { createGenerator } from "@forge/generator";
 import type { GeneratorContext } from "@forge/generator";
 import { getLLMClient } from './config/llm.ts';
 import { ContentHandler, GenerationContext, YogaContext, DharmaTalkContext } from './content/ContentHandler.ts';
 import { YogaContentHandler } from './content/YogaContentHandler.ts';
 import { DharmaContentHandler } from './content/DharmaContentHandler.ts';
+import { getConfigPath, ensureDirectories, PATHS } from "./config.ts";
 
 // Content type discriminator
 type ContentType = 'yoga' | 'dharma';
 
-interface TestConfig {
+// Export the interface and function for testing
+export interface TestConfig {
   provider: string;
   template: string;
   sequences?: YogaContext[];
@@ -24,13 +26,14 @@ const contentHandlers: Record<ContentType, ContentHandler> = {
   dharma: new DharmaContentHandler()
 };
 
+// Change from async function to export async function
 export async function loadConfig(configPath: string): Promise<TestConfig> {
   try {
-    const content = await Deno.readTextFile(configPath);
-    return JSON.parse(content);
+    const fullPath = getConfigPath(configPath);
+    const configText = await Deno.readTextFile(fullPath);
+    return JSON.parse(configText) as TestConfig;
   } catch (error) {
-    console.error(`Error loading config from ${configPath}:`, error);
-    throw error;
+    throw new Error(`Error loading config from ${configPath}: ${error}`);
   }
 }
 
@@ -50,11 +53,7 @@ async function generateContent(
   const handler = contentHandlers[item.type];
   handler.validateContext(item);
 
-  const templatePath = join(
-    dirname(fromFileUrl(import.meta.url)),
-    "../../data/templates",
-    config.template
-  );
+  const templatePath = join(PATHS.data.templates, config.template);
 
   const llm = getLLMClient();
 
@@ -102,8 +101,7 @@ export async function generateTestSequence(
     return;
   }
 
-  const outputDir = join(dirname(fromFileUrl(import.meta.url)), "../../data/output");
-  await ensureDir(outputDir);
+  await ensureDir(PATHS.data.output);
 
   for (const item of selectedItems) {
     console.log(`\nGenerating ${item.type} content: ${item.name}`);
@@ -114,7 +112,7 @@ export async function generateTestSequence(
       const uniqueId = generateShortId();
       
       const outputPath = join(
-        outputDir,
+        PATHS.data.output,
         `${uniqueId}-${item.name.toLowerCase().replace(/\s+/g, '-')}-${item.type}-prompt.md`
       );
       
@@ -130,27 +128,30 @@ export async function generateTestSequence(
 // Export for testing
 export { generateShortId };
 
-if (import.meta.main) {
+async function main() {
+  await ensureDirectories();
+  
   const flags = parse(Deno.args, {
     string: ["config", "sequence"],
     default: {
-      config: "data/config/dharma-config.json"
+      config: "dharma-config.json"
     },
   });
 
-  const configPath = join(dirname(fromFileUrl(import.meta.url)), 
-                         `../../${flags.config}`);
-  
   try {
-    const config = await loadConfig(configPath);
+    const config = await loadConfig(flags.config);
     await generateTestSequence(config, flags.sequence);
   } catch (error) {
     console.error("Failed to run test generation:", error);
     console.error("\nUsage:");
     console.error("  deno run --allow-read --allow-write content-strategy.ts [options]");
     console.error("\nOptions:");
-    console.error("  --config=<string>    Path to test configuration file (default: data/config/dharma-config.json)");
+    console.error("  --config=<string>    Name of config file in data/config directory (default: dharma-config.json)");
     console.error("  --sequence=<string>  Name of specific sequence to generate (optional)");
     Deno.exit(1);
   }
+}
+
+if (import.meta.main) {
+  main();
 } 

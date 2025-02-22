@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import { loadConfig, generateShortId } from "../../src/app/practices.ts";
+import { loadConfig, generateShortId } from "../../src/practices.ts";
 import { stub } from "https://deno.land/std/testing/mock.ts";
 
 Deno.test("generateShortId should create 5 character string", () => {

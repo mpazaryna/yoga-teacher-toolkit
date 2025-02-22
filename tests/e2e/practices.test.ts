@@ -1,8 +1,8 @@
 import { assertEquals, assertExists } from "https://deno.land/std/testing/asserts.ts";
-import { generateTestSequence } from "../../src/app/practices.ts";
+import { generateTestSequence } from "../../src/practices.ts";
 import { join, dirname, fromFileUrl } from "https://deno.land/std/path/mod.ts";
 import { ensureDir } from "https://deno.land/std/fs/mod.ts";
-import type { YogaContext } from "../../src/app/content/ContentHandler.ts";
+import type { YogaContext } from "../../src/content/ContentHandler.ts";
 
 // Get project root directory
 const PROJECT_ROOT = new URL("../../", import.meta.url).pathname;
