@@ -16,10 +16,11 @@
     "@templates": "./data/templates",
     "@output": "./data/output",
     "@setlists": "./data/setlists",
-    "@forge/llm": "../forge/llm/mod.ts",
-    "@forge/generator": "../forge/generator/mod.ts"
+    "@forge/llm": "./src/forge/llm/mod.ts",
+    "@forge/generator": "./src/forge/generator/mod.ts"
   },
   "tasks": {
+    "dev": "deno run --watch --allow-net --allow-env --allow-read src/server/server.ts",
     "test": "deno test --allow-read --allow-env --allow-write --allow-net",
     "approve": "deno run --allow-read --allow-write src/app/approve.ts",
     "list:drafts": "deno run --allow-read src/app/list.ts --status=draft",
