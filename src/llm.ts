@@ -1,4 +1,5 @@
 import { createOpenAIClient, createGeminiClient } from "@forge/llm";
+import { LLM_CLIENT } from "./config.ts";
 
 // Define separate configurations for OpenAI and Gemini
 export const openAIConfig = {
@@ -10,14 +11,15 @@ export const openAIConfig = {
 
 export const geminiConfig = {
   apiKey: Deno.env.get('GOOGLE_API_KEY')?.trim() || '',
-  model: 'gemini-pro',
+  model: 'gemini-1.5-pro',
   temperature: 0.7,
   maxTokens: 1000,
 };
 
 // Define a type for the client
-const DEFAULT_CLIENT: 'openai' | 'gemini' = 'openai'; // Change this to 'gemini' to switch
+// const DEFAULT_CLIENT: 'openai' | 'gemini' = 'openai'; // Change this to 'gemini' to switch
 
-export const getLLMClient = (config = DEFAULT_CLIENT === 'gemini' ? geminiConfig : openAIConfig) => {
-  return DEFAULT_CLIENT === 'gemini' ? createGeminiClient(config) : createOpenAIClient(config);
+// Use the imported LLM_CLIENT configuration
+export const getLLMClient = (config = LLM_CLIENT === 'gemini' ? geminiConfig : openAIConfig) => {
+  return LLM_CLIENT === 'gemini' ? createGeminiClient(config) : createOpenAIClient(config);
 }; 

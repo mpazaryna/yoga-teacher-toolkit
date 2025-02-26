@@ -18,6 +18,9 @@ export const PATHS = {
 console.log("Project root:", PROJECT_ROOT);
 console.log("Config path:", PATHS.data.config);
 
+// Set the LLM client type directly
+export const LLM_CLIENT = 'gemini'; // Change this to 'openai' to switch clients
+
 // Helper function to get config file path
 export function getConfigPath(configName: string): string {
   // Remove any leading 'data/config/' since we'll add the full path
