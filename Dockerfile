@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 8000
 
 # Command to run the application
-CMD ["deno", "run", "--watch", "--allow-net", "--allow-env", "--allow-read", "src/server.ts"] 
+CMD ["deno", "run", "--watch", "--allow-net", "--allow-env", "--allow-read", "src/server/server.ts"] 
