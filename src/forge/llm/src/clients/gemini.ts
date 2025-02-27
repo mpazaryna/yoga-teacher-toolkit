@@ -11,10 +11,9 @@ import { logger } from '../utils/log.ts'
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models'
 
-const DEFAULT_GEMINI_MODEL: GeminiModel = 'gemini-pro'
+const DEFAULT_GEMINI_MODEL: GeminiModel = 'gemini-1.5-pro'
 
 const SUPPORTED_GEMINI_MODELS: Set<GeminiModel> = new Set([
-  'gemini-pro',
   'gemini-1.5-pro',
   'gemini-1.5-flash'
 ])
