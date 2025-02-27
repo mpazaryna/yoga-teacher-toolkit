@@ -1,10 +1,11 @@
-# Module Template Generator
+# Generator
 
 A functional template-based content generation module that implements the Builder pattern with a fluent interface for generating content using Large Language Models (LLMs).
 
 ## Architecture
 
 This module implements two key patterns:
+
 1. **Builder Pattern**: Constructs complex content generation through a step-by-step process
 2. **Fluent Interface**: Provides a chainable API for a more readable and maintainable code
 
@@ -24,4 +25,9 @@ This module implements two key patterns:
 - **Extensible**: Support for custom transforms and LLM providers
 - **Type Safety**: Full TypeScript support with clear interfaces
 
-## Core Types
+## Tests
+
+```bash
+deno test tests/unit --allow-write --allow-read
+deno test tests/e2e --allow-write --allow-read --allow-env --allow-net
+```

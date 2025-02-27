@@ -78,3 +78,9 @@ The application follows SOLID principles and implements a robust type system:
 - **Interface Segregation**: Clear separation of concerns
 - **Dependency Inversion**: Pluggable components and abstractions
 
+## Testing Forge Modules
+
+```bash
+deno test src/forge/llm/tests --allow-read --allow-write --allow-env --allow-net
+deno test src/forge/generator/tests --allow-read --allow-write --allow-env --allow-net
+```

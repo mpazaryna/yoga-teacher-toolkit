@@ -1,0 +1,5 @@
+# Basic Template Test
+
+Hello E2E Test!
+
+This is a test template with generated content.

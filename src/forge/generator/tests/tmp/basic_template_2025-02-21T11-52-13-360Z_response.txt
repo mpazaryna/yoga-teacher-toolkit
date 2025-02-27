@@ -1,0 +1,5 @@
+I hope you are having a great day! This template is just a simple example of how you can use placeholders to customize your messages. Feel free to modify it to suit your needs.
+
+Remember, testing is an important part of software development, so make sure to thoroughly test your code before deploying it to production.
+
+If you have any questions or need help with testing, feel free to reach out. Have a wonderful day!

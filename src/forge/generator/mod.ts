@@ -11,3 +11,5 @@ export type {
 // Export utilities
 export { loadTemplate, applyContext } from "./src/template.ts";
 export { withRetry } from "./src/utils.ts"; 
+
+export { mockGeneratorConfig } from "./tests/mocks/llm.ts";
