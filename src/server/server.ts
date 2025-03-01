@@ -180,6 +180,7 @@ if (import.meta.main) {
      */
     onError: (error) => {
       console.error('Server error:', error);
+      return new Response('Internal Server Error', { status: 500 });
     },
   });
 }

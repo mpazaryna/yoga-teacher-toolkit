@@ -27,6 +27,10 @@
     "list:drafts": "deno run --allow-read src/app/list.ts --status=draft",
     "list:approved": "deno run --allow-read src/app/list.ts --status=approved",
     "test:setlist": "deno run --allow-read --allow-write --allow-env --allow-net src/practices.ts --config=data/config/setlist-strength.json",
-    "test:talk": "deno run --allow-read --allow-write --allow-env --allow-net src/practices.ts --config=data/config/talk-relationship.json"
+    "test:talk": "deno run --allow-read --allow-write --allow-env --allow-net src/practices.ts --config=data/config/talk-relationship.json",
+    "test:cov": "deno test --allow-read --allow-write --allow-env --allow-net --coverage=coverage",
+    "test:cov-report": "deno coverage --lcov coverage --output=coverage.lcov && deno coverage coverage",
+    "test:cov-html": "deno coverage coverage --html",
+    "test:cov-lcov": "deno coverage --lcov coverage --output=coverage.lcov"
   }
 }
